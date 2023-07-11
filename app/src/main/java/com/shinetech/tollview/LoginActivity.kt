@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.shinetech.tollview.util.Utility
 
 class LoginActivity : AppCompatActivity() {
     lateinit var editTextEmail: EditText
@@ -15,6 +16,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var btnSignUp: Button
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var utility: Utility
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
 
         var email: String
         var password: String
+
+        utility = Utility(applicationContext)
 
         btnLogIn.setOnClickListener{
             email = editTextEmail.text.toString()
@@ -47,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
             if(task.isSuccessful){
                 logInWithFirebase(email, password)
             }else{
-                toastln("There was an error")
+                utility.toastln("There was an error")
                 println("${task.exception?.localizedMessage}")
             }
         }
@@ -77,17 +81,5 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-    }
-
-    private fun toastln(s: String) {
-        Toast.makeText(
-            applicationContext,
-            s,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-    private fun woof(name: String, s: String) {
-        println("$name: $s")
-        toastln("$name: $s")
     }
 }
