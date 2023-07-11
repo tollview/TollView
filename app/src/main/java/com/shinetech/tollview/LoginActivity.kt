@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     lateinit var editTextEmail: EditText
@@ -15,7 +14,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var btnLogIn: Button
     lateinit var btnSignUp: Button
 
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +25,8 @@ class LoginActivity : AppCompatActivity() {
         btnLogIn = findViewById(R.id.loginButtonLogIn)
         btnSignUp = findViewById(R.id.loginButtonSignUp)
 
-        var email = editTextEmail.text.toString()
-        var password = editTextPassword.text.toString()
+        var email: String
+        var password: String
 
         btnLogIn.setOnClickListener{
             email = editTextEmail.text.toString()
