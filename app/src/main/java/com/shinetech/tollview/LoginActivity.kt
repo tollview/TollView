@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     lateinit var editTextEmail: EditText
@@ -32,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
         btnLogIn.setOnClickListener{
             email = editTextEmail.text.toString()
             password = editTextPassword.text.toString()
-            logInUser(email, password)
+            logInWithFirebase(email, password)
         }
         btnSignUp.setOnClickListener{
             email = editTextEmail.text.toString()
@@ -46,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if(task.isSuccessful){
-                logInUser(email, password)
+                logInWithFirebase(email, password)
             }else{
                 toastln("There was an error")
                 println("${task.exception?.localizedMessage}")
@@ -55,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun logInUser(userEmail: String, userPassword: String) {
+    private fun logInWithFirebase(userEmail: String, userPassword: String) {
         auth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(applicationContext, "Welcome", Toast.LENGTH_SHORT).show()
