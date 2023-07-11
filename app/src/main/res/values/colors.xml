@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="tvDark">#FF0E0F15</color>
+    <color name="tvLight">#FFDEEDFD</color>
+    <color name="tvBlue">#FF2E62B7</color>
+    <color name="tvAccentSoft">#FFF19C79</color>
+    <color name="tvAccentHard">#FFFFC476</color>
+
 </resources>
