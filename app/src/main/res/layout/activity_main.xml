@@ -34,4 +34,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnDebugGetAllGates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="252dp"
+        android:layout_marginBottom="4dp"
+        android:backgroundTint="@color/tvDebug"
+        android:fontFamily="@font/ubuntu_bold_italic"
+        android:text="Get All Gates"
+        android:textColor="@color/tvBlue"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

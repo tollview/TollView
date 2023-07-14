@@ -7,5 +7,7 @@
     <color name="tvBlue">#FF2E62B7</color>
     <color name="tvAccentSoft">#FFF19C79</color>
     <color name="tvAccentHard">#FFFFC476</color>
+    <color name="tvDebug">#FF7FFF00</color>
+
 
 </resources>
