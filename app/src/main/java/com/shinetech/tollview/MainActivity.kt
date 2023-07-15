@@ -3,8 +3,6 @@ package com.shinetech.tollview
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Debug
-import android.provider.ContactsContract.Data
 import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -17,10 +15,15 @@ import com.shinetech.tollview.util.Utility
 class MainActivity : AppCompatActivity() {
 
     lateinit var utility: Utility
+
     lateinit var btnSignOut: Button
     lateinit var btnDebugGetAllGates: Button
+
+    private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
+
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    val gatesReference: DatabaseReference = database.reference.child("gates")
+    private val gatesReference: DatabaseReference = database.reference.child("gates")
+
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,8 @@ class MainActivity : AppCompatActivity() {
                 for (eachGate in snapshot.children) {
                     val gate: Gate? = eachGate.getValue(Gate::class.java)
                     gate?.let {
-                        utility.woof("name:", "${gate.name}")
+                        println(gate.name)
+                        gatesList.add(gate)
                     }
                 }
             }
