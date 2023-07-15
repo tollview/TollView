@@ -3,22 +3,33 @@ package com.shinetech.tollview
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Debug
+import android.provider.ContactsContract.Data
 import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.shinetech.tollview.util.Utility
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var btnSignOut: Button
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     lateinit var utility: Utility
+    lateinit var btnSignOut: Button
+    lateinit var btnDebugGetAllGates: Button
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val gatesReference: DatabaseReference = database.reference.child("gates")
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnSignOut = findViewById(R.id.btnSignOut)
-
         utility = Utility(applicationContext)
+
+        btnSignOut = findViewById(R.id.btnSignOut)
+        btnDebugGetAllGates = findViewById(R.id.btnDebugGetAllGates)
 
         btnSignOut.setOnClickListener{
             btnSignOut.isClickable = false
@@ -28,5 +39,28 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        btnDebugGetAllGates.setOnClickListener{
+            getAllGatesFromDatabase()
+        }
+
+    }
+
+    fun getAllGatesFromDatabase() {
+        gatesReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (eachGate in snapshot.children) {
+                    val gate: Gate? = eachGate.getValue(Gate::class.java)
+                    gate?.let {
+                        utility.woof("name:", "${gate.name}")
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }
