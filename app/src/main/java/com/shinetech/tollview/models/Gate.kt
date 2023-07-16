@@ -1,4 +1,4 @@
-package com.shinetech.tollview
+package com.shinetech.tollview.models
 
 data class Gate(
     val id: String = "",
