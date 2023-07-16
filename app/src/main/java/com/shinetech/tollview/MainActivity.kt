@@ -19,11 +19,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var btnSignOut: Button
     lateinit var btnDebugGetAllGates: Button
+    lateinit var btnDebugGiveUserToll: Button
 
     private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val gatesReference: DatabaseReference = database.reference.child("gates")
+    private val usersReference: DatabaseReference = database.reference.child("users")
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         btnSignOut = findViewById(R.id.btnSignOut)
         btnDebugGetAllGates = findViewById(R.id.btnDebugGetAllGates)
+        btnDebugGiveUserToll = findViewById(R.id.btnDebugGiveUserToll)
 
         btnSignOut.setOnClickListener{
             btnSignOut.isClickable = false
@@ -48,9 +51,13 @@ class MainActivity : AppCompatActivity() {
             getAllGatesFromDatabase()
         }
 
+        btnDebugGiveUserToll.setOnClickListener {
+            println("Current User ID: ${auth.currentUser?.uid}")
+        }
+
     }
 
-    fun getAllGatesFromDatabase() {
+    private fun getAllGatesFromDatabase() {
         gatesReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (eachGate in snapshot.children) {
@@ -63,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
         })
