@@ -10,10 +10,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.values
 import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.models.User
 import com.shinetech.tollview.util.Utility
+import kotlinx.coroutines.runBlocking
 import java.sql.Timestamp
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var btnSignOut: Button
     lateinit var btnDebugGetAllGates: Button
     lateinit var btnDebugGiveUserToll: Button
+    lateinit var btnDebugAssignRandomToll: Button
 
     private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
@@ -39,7 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         btnSignOut = findViewById(R.id.btnSignOut)
         btnDebugGetAllGates = findViewById(R.id.btnDebugGetAllGates)
-        btnDebugGiveUserToll = findViewById(R.id.btnDebugGiveUserToll)
+        btnDebugGiveUserToll = findViewById(R.id.btnDebugGiveDummyTolls)
+        btnDebugAssignRandomToll = findViewById(R.id.btnDebugAssignRandomToll)
 
         btnSignOut.setOnClickListener{
             btnSignOut.isClickable = false
@@ -60,6 +64,9 @@ class MainActivity : AppCompatActivity() {
             addUserToDatabase()
         }
 
+        btnDebugAssignRandomToll.setOnClickListener{
+            assignRandomToll()
+        }
     }
 
     private fun getAllGatesFromDatabase() {
@@ -109,7 +116,37 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
 
+    fun assignRandomToll() {
+        retrieveGatesFromDatabase { gates ->
+            for (gate in gates) {
+                println(gate.name)
+            }
+        }
+    }
+
+    fun retrieveGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
+        val gatesList: ArrayList<Gate> = ArrayList<Gate>()
+
+        gatesReference.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                gatesList.clear()
+
+                for (gateSnapshot in dataSnapshot.children) {
+                    val gate = gateSnapshot.getValue(Gate::class.java)
+                    gate?.let {
+                        gatesList.add(it)
+                    }
+                }
+                callback(gatesList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
 
     }
 }
