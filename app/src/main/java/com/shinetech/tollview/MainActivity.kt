@@ -11,7 +11,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.shinetech.tollview.models.Gate
+import com.shinetech.tollview.models.Toll
+import com.shinetech.tollview.models.User
 import com.shinetech.tollview.util.Utility
+import java.sql.Timestamp
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +56,8 @@ class MainActivity : AppCompatActivity() {
 
         btnDebugGiveUserToll.setOnClickListener {
             println("Current User ID: ${auth.currentUser?.uid}")
+
+            addUserToDatabase()
         }
 
     }
@@ -78,6 +83,32 @@ class MainActivity : AppCompatActivity() {
 
     fun addUserToDatabase() {
 
+        val id: String = auth.currentUser?.uid ?: return
+
+        println("Generated ID: $id")
+        println("Auth ID: ${auth.currentUser?.uid}")
+
+        val tolls: ArrayList<Toll> = ArrayList<Toll>()
+
+        val timestamp: Timestamp = Timestamp(234827042)
+        val toll: Toll = Toll(id, timestamp)
+        tolls.add(toll)
+        tolls.add(toll)
+        tolls.add(toll)
+
+        val user: User = User(tolls)
+
+        println("User: $user")
+
+        usersReference.child(id).setValue(user).addOnCompleteListener { task ->
+
+            if (task.isSuccessful) {
+                utility.toastln("User Added Successfully")
+            } else {
+                utility.toastln("Error Adding User")
+            }
+
+        }
 
 
     }
