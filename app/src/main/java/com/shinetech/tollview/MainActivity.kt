@@ -75,4 +75,10 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
+    fun addUserToDatabase() {
+
+
+
+    }
 }
