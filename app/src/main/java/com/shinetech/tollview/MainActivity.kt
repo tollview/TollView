@@ -119,11 +119,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun assignRandomToll() {
+
+        val gatesUnderOneDollar = ArrayList<Gate>()
+
         retrieveGatesFromDatabase { gates ->
             for (gate in gates) {
-                println(gate.name)
+                if (gate.cost < 1.00) {
+                    gatesUnderOneDollar.add(gate)
+                }
+            }
+
+            gatesUnderOneDollar.forEach {
+                println("${it.name}: ${it.cost}")
             }
         }
+
+
     }
 
     fun retrieveGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
@@ -147,6 +158,5 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
     }
 }
