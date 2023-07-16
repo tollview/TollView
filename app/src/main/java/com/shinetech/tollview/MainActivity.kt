@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         val tolls: ArrayList<Toll> = ArrayList<Toll>()
 
         val timestamp: Timestamp = Timestamp(234827042)
-        val toll: Toll = Toll(id, timestamp)
+        val toll: Toll = Toll("dummyString", timestamp)
         tolls.add(toll)
         tolls.add(toll)
         tolls.add(toll)
@@ -120,8 +120,27 @@ class MainActivity : AppCompatActivity() {
     fun assignRandomToll() {
 
         retrieveGatesFromDatabase { gates ->
-            val randomIndex = Random.nextInt(gates.lastIndex+1)
+            val userId: String = auth.currentUser!!.uid
+            val randomIndex: Int = Random.nextInt(gates.lastIndex+1)
+            val randomGate: Gate = gates[randomIndex]
             utility.toastln(gates[randomIndex].name)
+
+            val tolls: ArrayList<Toll> = ArrayList<Toll>()
+            val timestamp: Timestamp = Timestamp(System.currentTimeMillis())
+            val toll: Toll = Toll(randomGate.id, timestamp)
+            tolls.add(toll)
+
+            val user: User = User(tolls)
+
+
+            usersReference.child(userId).child("tolls").setValue(tolls).addOnCompleteListener {task ->
+                if (task.isSuccessful) {
+                    utility.toastln("Random toll added")
+                } else {
+                    utility.toastln("Error adding the user code 048x930-503750.png")
+                }
+
+            }
         }
 
 
