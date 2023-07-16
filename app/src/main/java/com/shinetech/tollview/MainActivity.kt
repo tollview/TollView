@@ -10,13 +10,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.values
 import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.models.User
 import com.shinetech.tollview.util.Utility
-import kotlinx.coroutines.runBlocking
 import java.sql.Timestamp
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -120,18 +119,9 @@ class MainActivity : AppCompatActivity() {
 
     fun assignRandomToll() {
 
-        val gatesUnderOneDollar = ArrayList<Gate>()
-
         retrieveGatesFromDatabase { gates ->
-            for (gate in gates) {
-                if (gate.cost < 1.00) {
-                    gatesUnderOneDollar.add(gate)
-                }
-            }
-
-            gatesUnderOneDollar.forEach {
-                println("${it.name}: ${it.cost}")
-            }
+            val randomIndex = Random.nextInt(gates.lastIndex+1)
+            utility.toastln(gates[randomIndex].name)
         }
 
 
