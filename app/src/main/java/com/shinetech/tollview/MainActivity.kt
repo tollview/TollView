@@ -142,19 +142,30 @@ class MainActivity : AppCompatActivity() {
 
                 tollsList.add(newToll)
 
-                val user: User = User(tollsList)
-
-                println("New User: $user")
-
                 usersReference.child(userId).child("tolls").setValue(tollsList).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        utility.toastln("Random Toll Added")
-                    } else {
+                    if (!task.isSuccessful) {
                         utility.toastln("Error Adding Random Toll")
                     }
                 }
+                displayLatestToll()
             }
         }
+
+    }
+
+    private fun displayLatestToll() {
+       retrieveGatesFromDatabase { gates ->
+           getTollsForUser { tolls ->
+               val latestTollIndex: Int = tolls.lastIndex
+               val latestTollGateId: String = tolls[latestTollIndex].gateId
+               for (gate in gates) {
+                   if (gate.id == latestTollGateId) {
+                       utility.toastln("$${gate.cost} at ${gate.name}")
+                   }
+               }
+
+           }
+       }
 
     }
 
