@@ -3,6 +3,7 @@ package com.shinetech.tollview
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.renderscript.Sampler.Value
 import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -119,37 +120,48 @@ class MainActivity : AppCompatActivity() {
 
     fun assignRandomToll() {
 
-        retrieveGatesFromDatabase { gates ->
-            val userId: String = auth.currentUser!!.uid
-            val randomIndex: Int = Random.nextInt(gates.lastIndex+1)
-            val randomGate: Gate = gates[randomIndex]
-            utility.toastln(gates[randomIndex].name)
-
-            val tolls: ArrayList<Toll> = ArrayList<Toll>()
-            val timestamp: Timestamp = Timestamp(System.currentTimeMillis())
-            val toll: Toll = Toll(randomGate.id, timestamp)
-            tolls.add(toll)
-
-            val user: User = User(tolls)
+        println("Getting tolls hopefully")
 
 
-            usersReference.child(userId).child("tolls").setValue(tolls).addOnCompleteListener {task ->
-                if (task.isSuccessful) {
-                    utility.toastln("Random toll added")
-                } else {
-                    utility.toastln("Error adding the user code 048x930-503750.png")
+
+        getTollsForUser { tolls ->
+
+            val tollsList = ArrayList<Toll>()
+
+            tolls.forEach { toll ->
+                tollsList.add(toll)
+            }
+
+            retrieveGatesFromDatabase { gates ->
+                val userId: String = auth.currentUser!!.uid
+                val randomIndex: Int = Random.nextInt(gates.lastIndex+1)
+                val randomGate: Gate = gates[randomIndex]
+
+                val timestamp: Timestamp = Timestamp(System.currentTimeMillis())
+                val newToll: Toll = Toll(randomGate.id, timestamp)
+
+                tollsList.add(newToll)
+
+                val user: User = User(tollsList)
+
+                println("New User: $user")
+
+                usersReference.child(userId).child("tolls").setValue(tollsList).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        utility.toastln("Random Toll Added")
+                    } else {
+                        utility.toastln("Error Adding Random Toll")
+                    }
                 }
-
             }
         }
-
 
     }
 
     fun retrieveGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
         val gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
-        gatesReference.addValueEventListener(object: ValueEventListener {
+        gatesReference.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 gatesList.clear()
 
@@ -168,4 +180,48 @@ class MainActivity : AppCompatActivity() {
 
         })
     }
+
+    fun getTollsForUser(callback: (ArrayList<Toll>) -> Unit) {
+        val tollsList: ArrayList<Toll> = ArrayList<Toll>()
+
+        println(auth.currentUser!!.uid)
+
+        val tollsReference = usersReference.child(auth.currentUser!!.uid).child("tolls")
+
+        tollsReference.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                tollsList.clear()
+
+                for (tollSnapshot in dataSnapshot.children) {
+
+                    val gateId = tollSnapshot.child("gateId").getValue(String::class.java) ?: ""
+                    val timestampMap = tollSnapshot.child("timestamp").getValue() as? Map<String, Any?>
+
+                    val timeLong = timestampMap?.get("time") as? Long
+                    val nanos = (timestampMap?.get("nanos") as? Long)?.toInt()
+
+                    val timestamp = if (timeLong != null) {
+                        Timestamp(timeLong).apply {
+                            this.nanos = nanos ?: 0
+                        }
+                    } else {
+                        null
+                    }
+
+                    val toll = Toll(gateId, timestamp)
+
+                    toll?.let {
+                        tollsList.add(toll)
+                    }
+                }
+
+                callback(tollsList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
 }
