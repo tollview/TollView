@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import com.shinetech.tollview.util.LocationClient
+import com.shinetech.tollview.util.Utility
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.onEach
 
 class LocationService: Service() {
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private lateinit var utility: Utility
     private lateinit var locationClient: LocationClient
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -29,6 +31,7 @@ class LocationService: Service() {
             applicationContext,
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
+        utility= Utility(applicationContext)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -52,8 +55,9 @@ class LocationService: Service() {
             .getLocationUpdates(10000L)
             .catch { e -> e.printStackTrace()}
             .onEach { location ->
-                val lat = location.latitude.toString()
-                val long = location.longitude.toString()
+                val lat = location.latitude
+                val long = location.longitude
+                utility.getClosestGate(lat, long)
                 val updatedNotification = notification.setContentText(
                     "Location: ($lat, $long)"
                 )
