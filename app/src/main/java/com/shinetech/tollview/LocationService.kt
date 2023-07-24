@@ -58,9 +58,16 @@ class LocationService: Service() {
                 val lat = location.latitude
                 val long = location.longitude
                 utility.getClosestGate(lat, long)
+//                val updatedNotification = notification.setContentText(
+//                    "Location: ($lat, $long)"
+//                )
+
+                val closestGate = utility.getClosestGate(lat, long)
+
                 val updatedNotification = notification.setContentText(
-                    "Location: ($lat, $long)"
+                    "Name: ${closestGate.name}"
                 )
+
                 notificationManager.notify(1, updatedNotification.build())
             }
             .launchIn(serviceScope)
