@@ -31,7 +31,7 @@ class LocationService: Service() {
     private lateinit var utility: Utility
     private lateinit var locationClient: LocationClient
 
-    private val PING_SPEED: Long = 500L
+    private val PING_SPEED: Long = 2_000L
     private var num_pings: Int = 0
 
     private var prevLongitude: Double = 0.0
@@ -90,20 +90,24 @@ class LocationService: Service() {
                 var roadName = ""
                 if (num_pings >= 2) {
                     roadName = getRoadName(currLatitude, currLongitude, applicationContext)
-                    updateBearing()
                     println("Speed: ${location.speed}")
+                }
+                else if (num_pings >= 3) {
+                    updateBearing()
                     println("Bearing: $bearing")
+
                 }
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
                 val updatedNotification = notification.setContentText(
-                    "Road Name: $roadName, going ${location.speed} mps, bearing: $bearing"
+                    "going ${location.speed} mps, bearing: $bearing D: ${prevLatitude - currLatitude}"
                 )
 
                 println("Closest Gate: ${closestGate.name}")
 
-                notificationManager.notify(1, updatedNotification.build())
+//                notificationManager.notify(1, updatedNotification.build())
+                println("-------->> $prevLatitude , $currLatitude <<--------")
 
                 prevLatitude = currLatitude
                 prevLongitude = currLongitude

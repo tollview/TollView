@@ -10,16 +10,124 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="MAIN PAGE"
-        android:textSize="500sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="74dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="105dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="135dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="184dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="216dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCurrent2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Prev:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
+
+    <TextView
+        android:id="@+id/tvSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Speed:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
+
+    <TextView
+        android:id="@+id/tvBearing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="Bearing:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
+
+    <TextView
+        android:id="@+id/tvClosestToll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:text="ClosestToll:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
+
+    <TextView
+        android:id="@+id/tvTollDist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:text="TollDist:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
+
+    <TextView
+        android:id="@+id/tvRoadName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Road:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
 
     <Button
         android:id="@+id/btnDebugGiveDummyTolls"
@@ -39,8 +147,8 @@
         android:id="@+id/btnDebugAssignRandomToll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="248dp"
-        android:layout_marginBottom="104dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/tvDebug"
         android:fontFamily="@font/ubuntu_bold_italic"
         android:text="Random Toll"
@@ -75,5 +183,24 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCurrent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current:"
+        android:textColor="#FFFFFF"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tvCurrentVar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="14dp"
+        android:text="extView"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
