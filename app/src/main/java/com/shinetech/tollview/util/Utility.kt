@@ -87,27 +87,3 @@ class Utility(
         return leastDistGate
     }
 }
-
-//fun main() {
-//    val items = ArrayList<Int>()
-//    items.add(3)
-//    items.add(4956)
-//    items.add(3490)
-//    items.add(823)
-//    items.add(39)
-//    items.add(1)
-//    items.add(3409687)
-//
-//    val target: Int = 4
-//    var leastDist: Int = 999999999
-//    items.forEach {
-//        val difference = abs(target - it)
-//        if (difference <= leastDist){
-//            leastDistItem = it
-//            leastDist = difference
-//        }
-//    }
-//    leastDistItem?: -1
-//        println(it)
-//    }
-//}

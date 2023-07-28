@@ -75,6 +75,7 @@ class LocationService: Service() {
             .getLocationUpdates(PING_SPEED)
             .catch { e -> e.printStackTrace()}
             .onEach { location ->
+
                 num_pings += 1
 
                 println("------------------------------")
