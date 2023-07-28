@@ -19,6 +19,7 @@ import com.shinetech.tollview.util.Utility
 import java.sql.Timestamp
 import kotlin.random.Random
 import android.Manifest
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +29,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var btnDebugGetAllGates: Button
     lateinit var btnDebugGiveUserToll: Button
     lateinit var btnDebugAssignRandomToll: Button
+
+    lateinit var tvCurrentLocation: TextView
+    lateinit var tvPrevLocation: TextView
+    lateinit var tvSpeed: TextView
+    lateinit var tvBearing: TextView
+    lateinit var tvRoadName: TextView
+    lateinit var tvClosestToll: TextView
+    lateinit var tvTollDistance: TextView
 
     private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
@@ -60,6 +69,15 @@ class MainActivity : AppCompatActivity() {
         btnDebugGetAllGates = findViewById(R.id.btnDebugGetAllGates)
         btnDebugGiveUserToll = findViewById(R.id.btnDebugGiveDummyTolls)
         btnDebugAssignRandomToll = findViewById(R.id.btnDebugAssignRandomToll)
+
+        tvCurrentLocation = findViewById(R.id.tvCurrentVar)
+        tvPrevLocation = findViewById(R.id.tvPrevVar)
+        tvSpeed = findViewById(R.id.tvSpeedVar)
+        tvBearing = findViewById(R.id.tvBearingVar)
+        tvRoadName = findViewById(R.id.tvRoadVar)
+        tvClosestToll = findViewById(R.id.tvClosestTollVar)
+        tvTollDistance = findViewById(R.id.tvTollDistVar)
+
 
         btnSignOut.setOnClickListener{
             btnSignOut.isClickable = false
