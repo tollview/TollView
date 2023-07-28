@@ -125,7 +125,7 @@ class LocationService: Service() {
             return "Error in Geocoding"
         }
 
-        if (addresses != null && addresses.isNotEmpty()) {
+        if (!addresses.isNullOrEmpty()) {
             val address = addresses[0]
             return address.thoroughfare ?: "Unknown Road"
         }
