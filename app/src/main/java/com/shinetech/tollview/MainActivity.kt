@@ -91,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                 for (eachGate in snapshot.children) {
                     val gate: Gate? = eachGate.getValue(Gate::class.java)
                     gate?.let {
-                        println(gate.name)
                         gatesList.add(gate)
                     }
                 }
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         println("Generated ID: $id")
         println("Auth ID: ${auth.currentUser?.uid}")
 
-        val tolls: ArrayList<Toll> = ArrayList<Toll>()
+        val tolls = ArrayList<Toll>()
 
         val timestamp: Timestamp = Timestamp(234827042)
         val toll: Toll = Toll("dummyString", timestamp)
@@ -135,16 +134,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun assignRandomToll() {
-
         println("Getting tolls hopefully")
-
-
-
         getTollsForUser { tolls ->
 
             val tollsList = ArrayList<Toll>()
 
             tolls.forEach { toll ->
+                println(toll)
                 tollsList.add(toll)
             }
 
@@ -170,18 +166,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayLatestToll() {
-       retrieveGatesFromDatabase { gates ->
-           getTollsForUser { tolls ->
-               val latestTollIndex: Int = tolls.lastIndex
-               val latestTollGateId: String = tolls[latestTollIndex].gateId
-               for (gate in gates) {
-                   if (gate.id == latestTollGateId) {
-                       utility.toastln("$${gate.cost} at ${gate.name}")
-                   }
-               }
+        retrieveGatesFromDatabase { gates ->
+            getTollsForUser { tolls ->
+                val latestTollIndex: Int = tolls.lastIndex
+                val latestTollGateId: String = tolls[latestTollIndex].gateId
+                for (gate in gates) {
+                    if (gate.id == latestTollGateId) {
+                        utility.toastln("$${gate.cost} at ${gate.name}")
+                    }
+                }
 
-           }
-       }
+            }
+        }
 
     }
 

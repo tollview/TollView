@@ -1,0 +1,26 @@
+0015d86 HEAD@{0}: checkout: moving from 85426f4f3b22b2db00789de0c9687e2d314f2d7e to location-services
+85426f4 HEAD@{1}: commit: added function to calculate bearing given last two coords
+8257b3b HEAD@{2}: commit: used location services to retrieve road name and device velocity
+d655b2c HEAD@{3}: pull origin location-services: Fast-forward
+14a961a HEAD@{4}: checkout: moving from 0f3192dec27d74592f44c9e99ddc7c1b3777898c to 14a961a4064c201f458a123d9324fea5a3212951
+0f3192d HEAD@{5}: checkout: moving from location-services to 0f3192dec27d74592f44c9e99ddc7c1b3777898c
+0015d86 HEAD@{6}: checkout: moving from master to location-services
+94ff2c7 HEAD@{7}: pull: Fast-forward
+0f3192d HEAD@{8}: commit: finished functionality to add random toll to DB. replaced addValueEventListener with addListenerForSingleValueEvent
+50588de HEAD@{9}: pull: Fast-forward
+db1d40c HEAD@{10}: commit: added functionality to filter gates by cost
+192a30d HEAD@{11}: pull: Fast-forward
+84b3b05 HEAD@{12}: reset: moving to HEAD
+84b3b05 HEAD@{13}: commit: Added functionality to add users to realtime DB
+5281823 HEAD@{14}: commit: Added data classes for User and Toll
+720c259 HEAD@{15}: commit: Added button which will add user to DB, functionality still not implemented
+ae7bb78 HEAD@{16}: commit: moved Gates data class to model package
+c8dab63 HEAD@{17}: commit: added gatesList to save gates from DB to
+f4c512e HEAD@{18}: pull: Fast-forward
+5462089 HEAD@{19}: pull: Fast-forward
+d218659 HEAD@{20}: pull: Fast-forward
+9224273 HEAD@{21}: commit: Moved utility functions to utility class, refactored usages
+584c64c HEAD@{22}: pull: Fast-forward
+9b038cc HEAD@{23}: pull: Fast-forward
+63086a9 HEAD@{24}: commit: made auth private, removed unused declarations for email and password
+d74cb6e HEAD@{25}: clone: from github.com:ryan-dfw/TollView.git
