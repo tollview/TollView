@@ -92,7 +92,7 @@ class LocationService: Service() {
                     roadName = getRoadName(currLatitude, currLongitude, applicationContext)
                     println("Speed: ${location.speed}")
                 }
-                else if (num_pings >= 3) {
+                if (num_pings >= 3) {
                     updateBearing()
                     println("Bearing: $bearing")
 
