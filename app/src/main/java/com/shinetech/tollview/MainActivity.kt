@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity() {
             val data = intent.getStringExtra("data")
             println("got some $data")
         }
-
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
