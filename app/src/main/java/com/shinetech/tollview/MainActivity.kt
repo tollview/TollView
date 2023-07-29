@@ -19,6 +19,9 @@ import com.shinetech.tollview.util.Utility
 import java.sql.Timestamp
 import kotlin.random.Random
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +48,14 @@ class MainActivity : AppCompatActivity() {
     private val usersReference: DatabaseReference = database.reference.child("users")
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            val data = intent.getStringExtra("data")
+            println("got some $data")
+        }
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -101,6 +112,11 @@ class MainActivity : AppCompatActivity() {
         btnDebugAssignRandomToll.setOnClickListener{
             assignRandomToll()
         }
+
+        val filter = IntentFilter()
+        filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
+        registerReceiver(receiver, filter)
+
     }
 
     private fun getAllGatesFromDatabase() {
@@ -271,5 +287,6 @@ class MainActivity : AppCompatActivity() {
             startService(this)
         }
         super.onDestroy()
+        unregisterReceiver(receiver)
     }
 }

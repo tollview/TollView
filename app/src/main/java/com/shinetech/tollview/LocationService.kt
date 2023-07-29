@@ -109,6 +109,10 @@ class LocationService: Service() {
 //                notificationManager.notify(1, updatedNotification.build())
                 println("-------->> $prevLatitude , $currLatitude <<--------")
 
+                val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE")
+                intent.putExtra("data", "p1 Prev: $prevLatitude Curr: $currLatitude")
+                sendBroadcast(intent)
+
                 prevLatitude = currLatitude
                 prevLongitude = currLongitude
             }
