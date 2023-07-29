@@ -51,8 +51,20 @@ class MainActivity : AppCompatActivity() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            val data = intent.getStringExtra("data")
-            println("got some $data")
+            val currentLocation = intent.getStringExtra("currentLocation")
+            tvCurrentLocation.text = currentLocation
+            val previousLocation = intent.getStringExtra("previousLocation")
+            tvPrevLocation.text = previousLocation
+            val speed = intent.getStringExtra("speed")
+            tvSpeed.text = speed
+            val bearing = intent.getStringExtra("bearing")
+            tvBearing.text = bearing
+            val roadName = intent.getStringExtra("roadName")
+            tvRoadName.text = roadName
+            val closestToll = intent.getStringExtra("closestToll")
+            tvClosestToll.text = closestToll
+            val tollDist = intent.getStringExtra("tollDist")
+            tvTollDistance.text = tollDist
         }
     }
 

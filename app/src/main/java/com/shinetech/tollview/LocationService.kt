@@ -110,7 +110,13 @@ class LocationService: Service() {
                 println("-------->> $prevLatitude , $currLatitude <<--------")
 
                 val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE")
-                intent.putExtra("data", "p1 Prev: $prevLatitude Curr: $currLatitude")
+                intent.putExtra("currentLocation", "$currLatitude , $currLongitude")
+                intent.putExtra("previousLocation", "$prevLatitude , $prevLongitude")
+                intent.putExtra("speed", "${location.speed}")
+                intent.putExtra("bearing", "$bearing")
+                intent.putExtra("roadName", "$roadName")
+                intent.putExtra("closestToll", "${closestGate.name}")
+                intent.putExtra("TollDist", "idk")
                 sendBroadcast(intent)
 
                 prevLatitude = currLatitude
