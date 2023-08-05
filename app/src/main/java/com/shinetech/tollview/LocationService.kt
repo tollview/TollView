@@ -7,7 +7,6 @@ import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.IBinder
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import com.shinetech.tollview.models.Gate
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.lang.Exception
-import java.lang.Math.abs
 import java.lang.Math.atan2
 import java.lang.Math.cos
 import java.lang.Math.sin
@@ -40,7 +38,7 @@ class LocationService: Service() {
     private lateinit var locationClient: LocationClient
 
     private val PING_SPEED: Long = 2_000L
-    private var num_pings: Int = 0
+    private var numPings: Int = 0
 
     private var prevLongitude: Double = 0.0
     private var prevLatitude: Double = 0.0
@@ -80,10 +78,10 @@ class LocationService: Service() {
 
     private fun start() {
         val notification = NotificationCompat.Builder(this,"location")
-            .setContentTitle("Tracking location...")
-            .setContentText("Location: null")
+            .setContentTitle("Welcome to TollView")
+            .setContentText("Starting up...")
             .setSmallIcon(R.drawable.ic_launcher_background)
-            .setOngoing(true)
+//            .setOngoing(false)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -92,10 +90,10 @@ class LocationService: Service() {
             .catch { e -> e.printStackTrace()}
             .onEach { location ->
 
-                num_pings += 1
+                numPings += 1
 
                 println("------------------------------")
-                println("NEW PING: $num_pings")
+                println("NEW PING: $numPings")
                 println("------------------------------")
 
                 currLatitude = location.latitude
@@ -104,11 +102,11 @@ class LocationService: Service() {
                 utility.getClosestGate(currLatitude, currLongitude)
 
                 var roadName = ""
-                if (num_pings >= 2) {
+                if (numPings >= 2) {
                     roadName = getRoadName(currLatitude, currLongitude, applicationContext)
                     println("Speed: ${location.speed}")
                 }
-                if (num_pings >= 3) {
+                if (numPings >= 3) {
                     updateBearing()
                     println("Bearing: $bearing")
 
@@ -123,7 +121,7 @@ class LocationService: Service() {
                 println("isAtGate(): ${isAtGate(closestGate)}")
                 println("timeoutExpired(): ${timeoutExpired()}")
 
-                if (isAtGate(closestGate) && timeoutExpired()) {
+                if (isAtGate(closestGate) && timeoutExpired() && numPings >= 2) {
                     // incur toll
 
                     val tollIncurred = Toll(closestGate.id, Timestamp(System.currentTimeMillis()))
@@ -131,17 +129,18 @@ class LocationService: Service() {
 
                     println("YOU GOT A TOLL")
 
+                    val updatedNotification = notification.setContentText(
+                        "at ${closestGate.name}"
+                    )
+                    notification.setContentTitle("$${closestGate.cost}")
+                    notificationManager.notify(1, updatedNotification.build())
                 }
 
-                val updatedNotification = notification.setContentText(
-                    "going ${location.speed} mps, bearing: $bearing D: ${prevLatitude - currLatitude}"
-                )
 
                 println("Closest Gate: ${closestGate.name}")
 
                 println("userToll Size: ${userTolls.size}")
 
-//                notificationManager.notify(1, updatedNotification.build())
                 println("-------->> $prevLatitude , $currLatitude <<--------")
 
                 val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE")
