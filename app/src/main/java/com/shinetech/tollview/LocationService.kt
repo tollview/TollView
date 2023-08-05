@@ -7,9 +7,11 @@ import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.IBinder
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import com.shinetech.tollview.models.Gate
+import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.util.LocationClient
 import com.shinetech.tollview.util.Point
 import com.shinetech.tollview.util.Utility
@@ -21,20 +23,17 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.lang.Exception
-import java.lang.Math.PI
+import java.lang.Math.abs
 import java.lang.Math.atan2
 import java.lang.Math.cos
 import java.lang.Math.sin
-import java.lang.Math.sqrt
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
-import java.sql.Time
 import java.sql.Timestamp
 import java.util.Locale
-import kotlin.math.pow
 
 class LocationService: Service() {
-    private val MINIMUM_GATE_REENTRY_TIME: Double = 1.0
+    private val MINIMUM_TOLL_REENTRY_TIME: Double = 1.0
     private val DISTANCE_TUNING_PARAMETER: Double = 0.278
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var utility: Utility
@@ -50,6 +49,8 @@ class LocationService: Service() {
 
     private var bearing: Double = 0.0
 
+    private var userTolls: ArrayList<Toll> = ArrayList<Toll>()
+
     override fun onBind(p0: Intent?): IBinder? {
         return null
     }
@@ -60,7 +61,13 @@ class LocationService: Service() {
             applicationContext,
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
-        utility= Utility(applicationContext)
+        utility = Utility(applicationContext)
+
+        utility.getTollsForUser { tolls ->
+            tolls.forEach {
+                userTolls.add(it)
+            }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -104,17 +111,23 @@ class LocationService: Service() {
                 if (num_pings >= 3) {
                     updateBearing()
                     println("Bearing: $bearing")
+
                 }
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
-                // Debugging:
+
                 println("isAtGate: ${isAtGate(closestGate)}")
-                println("timeoutExpired: ${timeoutExpired()}")
+
+
+                println("isAtGate(): ${isAtGate(closestGate)}")
+                println("timeoutExpired(): ${timeoutExpired()}")
 
                 if (isAtGate(closestGate) && timeoutExpired()) {
                     // incur toll
-                    utility.woof("toll","incurred")
+
+                    println("YOU GOT A TOLL")
+
                 }
 
                 val updatedNotification = notification.setContentText(
@@ -122,6 +135,8 @@ class LocationService: Service() {
                 )
 
                 println("Closest Gate: ${closestGate.name}")
+
+                println("userToll Size: ${userTolls.size}")
 
 //                notificationManager.notify(1, updatedNotification.build())
                 println("-------->> $prevLatitude , $currLatitude <<--------")
@@ -133,7 +148,7 @@ class LocationService: Service() {
                 intent.putExtra("bearing", "$bearing")
                 intent.putExtra("roadName", "$roadName")
                 intent.putExtra("closestToll", "${closestGate.name}")
-                intent.putExtra("tollDist", "${distanceToGate(closestGate)} meters")
+                intent.putExtra("TollDist", "idk")
                 sendBroadcast(intent)
 
                 prevLatitude = currLatitude
@@ -146,59 +161,30 @@ class LocationService: Service() {
 
     private fun timeoutExpired(): Boolean {
 
-        var isTimeoutExpired: Boolean = false
-
-        utility.getTollsForUser { tolls ->
-            val mostRecentTollTime: Timestamp? = tolls[tolls.lastIndex].timestamp
+        if (!userTolls.isNullOrEmpty()) {
+            println("Actually calculated it this time")
+            val latestTollTimestamp = userTolls[userTolls.lastIndex].timestamp
             val currentTimestamp: Timestamp = Timestamp(System.currentTimeMillis())
 
-            mostRecentTollTime?.let {
-                val timeDelta: Double = (currentTimestamp.time - mostRecentTollTime.time)/60_000.0
-                isTimeoutExpired = timeDelta >= MINIMUM_GATE_REENTRY_TIME
-            }
 
+            latestTollTimestamp?.let {
+                print("Go past the let")
+                val timeDelta: Double = (currentTimestamp.time - latestTollTimestamp.time)/60_000.0
+                println("delta: ${timeDelta}")
+                return timeDelta >= MINIMUM_TOLL_REENTRY_TIME
+            }
         }
 
-        return isTimeoutExpired
-    }
-
-
-    private fun distanceToGate(gate: Gate): Double {
-        val R = 3958.8 // radius of Earth in miles
-        val lat1 = currLatitude * PI / 180
-        val lon1 = currLongitude * PI / 180
-        val lat2 = gate.latitude * PI / 180
-        val lon2 = gate.longitude * PI / 180
-
-        val dlat = lat2 - lat1
-        val dlon = lon2 - lon1
-
-        val a = sin(dlat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(dlon / 2).pow(2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        val distance = R * c
-
-        return distance * 1609.34 // Convert distance from miles to meters
+        return false
     }
 
     private fun isAtGate(closestGate: Gate): Boolean {
-        val R = 3958.8 // radius of Earth in miles
-        val lat1 = currLatitude * PI / 180
-        val lon1 = currLongitude * PI / 180
-        val lat2 = closestGate.latitude * PI / 180
-        val lon2 = closestGate.longitude * PI / 180
-
-        val dlat = lat2 - lat1
-        val dlon = lon2 - lon1
-
-        val a = sin(dlat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(dlon / 2).pow(2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        val distance = R * c
+        val currentPosition: Point = Point(currLatitude, currLongitude)
+        val closestGatePoint: Point = Point(closestGate.latitude, closestGate.longitude)
+        val distance: Double = currentPosition.distanceToOtherPoint(closestGatePoint)
 
         return distance <= DISTANCE_TUNING_PARAMETER
     }
-
 
     fun getRoadName(latitude: Double, longitude: Double, context: Context): String {
 
