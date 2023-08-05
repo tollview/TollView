@@ -133,7 +133,7 @@ class LocationService: Service() {
                 intent.putExtra("bearing", "$bearing")
                 intent.putExtra("roadName", "$roadName")
                 intent.putExtra("closestToll", "${closestGate.name}")
-                intent.putExtra("tollDist", "${distanceToGate(closestGate)} meters")
+                intent.putExtra("tollDist", "${distanceToGate(closestGate)}")
                 sendBroadcast(intent)
 
                 prevLatitude = currLatitude
@@ -153,7 +153,7 @@ class LocationService: Service() {
             val currentTimestamp: Timestamp = Timestamp(System.currentTimeMillis())
 
             mostRecentTollTime?.let {
-                val timeDelta: Double = (currentTimestamp.time - mostRecentTollTime.time)/60_000.0
+                val timeDelta: Double = (mostRecentTollTime.nanos - currentTimestamp.nanos)/60_000_000_000.0
                 isTimeoutExpired = timeDelta >= MINIMUM_GATE_REENTRY_TIME
             }
 
@@ -161,7 +161,6 @@ class LocationService: Service() {
 
         return isTimeoutExpired
     }
-
 
     private fun distanceToGate(gate: Gate): Double {
         val R = 3958.8 // radius of Earth in miles
