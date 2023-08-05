@@ -9,7 +9,9 @@ import android.location.Geocoder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
+import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.util.LocationClient
+import com.shinetech.tollview.util.Point
 import com.shinetech.tollview.util.Utility
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +29,7 @@ import java.lang.Math.toRadians
 import java.util.Locale
 
 class LocationService: Service() {
+    private val DISTANCE_TUNING_PARAMETER: Double = 0.278
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var utility: Utility
     private lateinit var locationClient: LocationClient
@@ -100,6 +103,11 @@ class LocationService: Service() {
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
+                if (isAtGate(closestGate) && timeoutExpired()) {
+                    // incur toll
+                    utility.woof("toll","incurred")
+                }
+
                 val updatedNotification = notification.setContentText(
                     "going ${location.speed} mps, bearing: $bearing D: ${prevLatitude - currLatitude}"
                 )
@@ -125,6 +133,20 @@ class LocationService: Service() {
             .launchIn(serviceScope)
 
         startForeground(1, notification.build())
+    }
+
+    private fun timeoutExpired(): Boolean {
+
+
+        return false
+    }
+
+    private fun isAtGate(closestGate: Gate): Boolean {
+        val currentPosition: Point = Point(currLatitude, currLongitude)
+        val closestGatePoint: Point = Point(closestGate.latitude, closestGate.longitude)
+        val distance: Double = currentPosition.distanceToOtherPoint(closestGatePoint)
+
+        return distance <= DISTANCE_TUNING_PARAMETER
     }
 
     fun getRoadName(latitude: Double, longitude: Double, context: Context): String {
