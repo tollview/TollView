@@ -10,6 +10,17 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tvDistToTollValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="null"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toEndOf="@+id/sbDistToToll"
+        app:layout_constraintTop_toBottomOf="@+id/tvTollDistVar" />
+
+    <TextView
         android:id="@+id/tvPrevVar"
         android:textColor="@color/tvDebug"
         android:layout_width="wrap_content"
@@ -209,5 +220,98 @@
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/tvCurrent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/sbDistToToll"
+        android:layout_width="201dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toEndOf="@+id/tvDistToToll"
+        app:layout_constraintTop_toBottomOf="@+id/tvTollDistVar" />
+
+    <TextView
+        android:id="@+id/tvDistToToll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="minDistToToll:"
+
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTollDist" />
+
+    <TextView
+        android:id="@+id/tvReentryTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="reentryTime:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDistToToll" />
+
+    <SeekBar
+        android:id="@+id/sbReentryTime"
+        android:layout_width="229dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:max="300"
+        app:layout_constraintStart_toEndOf="@+id/tvReentryTime"
+        app:layout_constraintTop_toBottomOf="@+id/sbDistToToll" />
+
+    <TextView
+        android:id="@+id/tvReentryTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="null"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toEndOf="@+id/sbReentryTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvDistToTollValue" />
+
+    <Button
+        android:id="@+id/btnUpdateValues"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/tvDebug"
+        android:text="Update Values"
+        android:textColor="@color/tvBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sbReentryTime" />
+
+    <TextView
+        android:id="@+id/tvPingSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="pingSpeed:"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvReentryTime" />
+
+    <SeekBar
+        android:id="@+id/sbPingSpeed"
+        android:layout_width="250dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="22dp"
+        android:max="900"
+        app:layout_constraintStart_toEndOf="@+id/tvPingSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/sbReentryTime" />
+
+    <TextView
+        android:id="@+id/tvPingSpeedValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="null"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toEndOf="@+id/sbPingSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/tvReentryTimeValue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

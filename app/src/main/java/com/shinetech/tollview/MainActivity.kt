@@ -22,6 +22,7 @@ import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.widget.SeekBar
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +41,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var tvRoadName: TextView
     lateinit var tvClosestToll: TextView
     lateinit var tvTollDistance: TextView
+
+    lateinit var sbDistToToll: SeekBar
+    lateinit var sbReentryTime: SeekBar
+    lateinit var sbPingSpeed: SeekBar
+    lateinit var tvDistToTollValue: TextView
+    lateinit var tvReentryTimeValue: TextView
+    lateinit var tvPingSpeedValue: TextView
+    lateinit var btnUpdateValues: Button
 
     private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
@@ -101,6 +110,27 @@ class MainActivity : AppCompatActivity() {
         tvClosestToll = findViewById(R.id.tvClosestTollVar)
         tvTollDistance = findViewById(R.id.tvTollDistVar)
 
+        sbDistToToll = findViewById(R.id.sbDistToToll)
+        sbReentryTime = findViewById(R.id.sbReentryTime)
+        sbPingSpeed = findViewById(R.id.sbPingSpeed)
+        tvDistToTollValue = findViewById(R.id.tvDistToTollValue)
+        tvReentryTimeValue = findViewById(R.id.tvReentryTimeValue)
+        tvPingSpeedValue = findViewById(R.id.tvPingSpeedValue)
+
+        btnUpdateValues = findViewById(R.id.btnUpdateValues)
+
+        tvDistToTollValue.text = sbDistToToll.progress.toString()
+        tvReentryTimeValue.text = sbReentryTime.progress.toString()
+        tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
+
+        btnUpdateValues.setOnClickListener {
+            val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
+            intent.putExtra("distToToll", sbDistToToll.progress / 100.0)
+            intent.putExtra("reentryTime", sbReentryTime.progress / 100.0)
+            intent.putExtra("pingSpeed", ((sbPingSpeed.progress / 100.0) + 1.0) * 1000L)
+            sendBroadcast(intent)
+        }
+
 
         btnSignOut.setOnClickListener{
             btnSignOut.isClickable = false
@@ -110,6 +140,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
 
         btnDebugGetAllGates.setOnClickListener{
             getAllGatesFromDatabase()
@@ -128,6 +159,49 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
         registerReceiver(receiver, filter)
+
+
+        sbDistToToll.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                tvDistToTollValue.text = (progress / 100.0).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // You can add code here if needed when tracking starts
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // You can add code here if needed when tracking stops
+            }
+        })
+
+        sbReentryTime.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                tvReentryTimeValue.text = (progress / 100.0).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // You can add code here if needed when tracking starts
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // You can add code here if needed when tracking stops
+            }
+        })
+
+        sbPingSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                tvPingSpeedValue.text = ((progress / 100.0) + 1.0).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // You can add code here if needed when tracking starts
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // You can add code here if needed when tracking stops
+            }
+        })
 
     }
 

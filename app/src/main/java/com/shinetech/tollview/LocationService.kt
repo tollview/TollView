@@ -2,8 +2,10 @@ package com.shinetech.tollview
 
 import android.app.NotificationManager
 import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.location.Address
 import android.location.Geocoder
 import android.os.IBinder
@@ -22,22 +24,25 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.lang.Exception
+import java.lang.Math.PI
 import java.lang.Math.atan2
 import java.lang.Math.cos
 import java.lang.Math.sin
+import java.lang.Math.sqrt
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
 import java.sql.Timestamp
 import java.util.Locale
+import kotlin.math.pow
 
 class LocationService: Service() {
-    private val MINIMUM_TOLL_REENTRY_TIME: Double = 1.0
-    private val DISTANCE_TUNING_PARAMETER: Double = 0.278
+    private var MINIMUM_TOLL_REENTRY_TIME: Double = 1.0
+    private var DISTANCE_TUNING_PARAMETER: Double = 0.278
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var utility: Utility
     private lateinit var locationClient: LocationClient
 
-    private val PING_SPEED: Long = 2_000L
+    private var PING_SPEED: Long = 2_000L
     private var numPings: Int = 0
 
     private var prevLongitude: Double = 0.0
@@ -48,6 +53,21 @@ class LocationService: Service() {
     private var bearing: Double = 0.0
 
     private var userTolls: ArrayList<Toll> = ArrayList<Toll>()
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            println("UPDATING VALUES!")
+
+            val distToToll = intent.getDoubleExtra("distToToll", 0.25)
+            DISTANCE_TUNING_PARAMETER = distToToll
+
+            val reentryTime = intent.getDoubleExtra("reentryTime", 1.0)
+            MINIMUM_TOLL_REENTRY_TIME = reentryTime
+
+            val pingSpeed: Long = intent.getLongExtra("pingSpeed", 2000)
+            PING_SPEED = pingSpeed
+        }
+    }
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -85,10 +105,19 @@ class LocationService: Service() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        val filter = IntentFilter()
+        filter.addAction("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
+        registerReceiver(receiver, filter)
+
         locationClient
             .getLocationUpdates(PING_SPEED)
             .catch { e -> e.printStackTrace()}
             .onEach { location ->
+
+
+                println("====> DISTANCE_TUNING_PARAMETER: $DISTANCE_TUNING_PARAMETER")
+                println("====> MINIMUM_TOLL_REENTRY_TIME: $MINIMUM_TOLL_REENTRY_TIME")
+                println("====> PING_SPEED: $PING_SPEED")
 
                 numPings += 1
 
@@ -150,7 +179,7 @@ class LocationService: Service() {
                 intent.putExtra("bearing", "$bearing")
                 intent.putExtra("roadName", "$roadName")
                 intent.putExtra("closestToll", "${closestGate.name}")
-                intent.putExtra("TollDist", "idk")
+                intent.putExtra("tollDist", "${distanceBetweenCoords(closestGate.latitude, closestGate.longitude)} miles")
                 sendBroadcast(intent)
 
                 prevLatitude = currLatitude
@@ -159,6 +188,24 @@ class LocationService: Service() {
             .launchIn(serviceScope)
 
         startForeground(1, notification.build())
+    }
+
+    fun distanceBetweenCoords(otherLat: Double, otherLong: Double): Double {
+        val R = 3958.8 // radius of Earth in miles
+        val lat1 = currLatitude * PI / 180
+        val lon1 = currLongitude * PI / 180
+        val lat2 = otherLat * PI / 180
+        val lon2 = otherLong * PI / 180
+
+        val dlat = lat2 - lat1
+        val dlon = lon2 - lon1
+
+        val a = sin(dlat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(dlon / 2).pow(2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        val distance = R * c
+
+        return distance
     }
 
     private fun timeoutExpired(): Boolean {
