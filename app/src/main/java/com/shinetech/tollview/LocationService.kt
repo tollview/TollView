@@ -230,7 +230,9 @@ class LocationService: Service() {
     private fun isAtGate(closestGate: Gate): Boolean {
         val currentPosition: Point = Point(currLatitude, currLongitude)
         val closestGatePoint: Point = Point(closestGate.latitude, closestGate.longitude)
-        val distance: Double = currentPosition.distanceToOtherPoint(closestGatePoint)
+
+        val distance = distanceBetweenCoords(closestGate.latitude, closestGate.longitude)
+//        val distance: Double = currentPosition.distanceToOtherPoint(closestGatePoint)
 
         return distance <= DISTANCE_TUNING_PARAMETER
     }

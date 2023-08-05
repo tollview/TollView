@@ -119,13 +119,13 @@ class MainActivity : AppCompatActivity() {
 
         btnUpdateValues = findViewById(R.id.btnUpdateValues)
 
-        tvDistToTollValue.text = sbDistToToll.progress.toString()
+        tvDistToTollValue.text = String.format("%.3f", 0.001 + sbDistToToll.progress / 1000.0)
         tvReentryTimeValue.text = sbReentryTime.progress.toString()
         tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
 
         btnUpdateValues.setOnClickListener {
             val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
-            intent.putExtra("distToToll", sbDistToToll.progress / 100.0)
+            intent.putExtra("distToToll", 0.001 + sbDistToToll.progress / 1000.0)
             intent.putExtra("reentryTime", sbReentryTime.progress / 100.0)
             intent.putExtra("pingSpeed", ((sbPingSpeed.progress / 100.0) + 1.0) * 1000L)
             sendBroadcast(intent)
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 
         sbDistToToll.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvDistToTollValue.text = (progress / 100.0).toString()
+                tvDistToTollValue.text = String.format("%.3f", 0.001 + progress / 1000.0)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
