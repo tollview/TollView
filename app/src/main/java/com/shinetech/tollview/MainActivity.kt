@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
 
     fun assignRandomToll() {
         println("Getting tolls hopefully")
-        getTollsForUser { tolls ->
+        utility.getTollsForUser { tolls ->
 
             val tollsList = ArrayList<Toll>()
 
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayLatestToll() {
         retrieveGatesFromDatabase { gates ->
-            getTollsForUser { tolls ->
+            utility.getTollsForUser { tolls ->
                 val latestTollIndex: Int = tolls.lastIndex
                 val latestTollGateId: String = tolls[latestTollIndex].gateId
                 for (gate in gates) {
@@ -250,48 +250,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun getTollsForUser(callback: (ArrayList<Toll>) -> Unit) {
-        val tollsList: ArrayList<Toll> = ArrayList<Toll>()
-
-        println(auth.currentUser!!.uid)
-
-        val tollsReference = usersReference.child(auth.currentUser!!.uid).child("tolls")
-
-        tollsReference.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                tollsList.clear()
-
-                for (tollSnapshot in dataSnapshot.children) {
-
-                    val gateId = tollSnapshot.child("gateId").getValue(String::class.java) ?: ""
-                    val timestampMap = tollSnapshot.child("timestamp").getValue() as? Map<String, Any?>
-
-                    val timeLong = timestampMap?.get("time") as? Long
-                    val nanos = (timestampMap?.get("nanos") as? Long)?.toInt()
-
-                    val timestamp = if (timeLong != null) {
-                        Timestamp(timeLong).apply {
-                            this.nanos = nanos ?: 0
-                        }
-                    } else {
-                        null
-                    }
-
-                    val toll = Toll(gateId, timestamp)
-
-                    toll?.let {
-                        tollsList.add(toll)
-                    }
-                }
-
-                callback(tollsList)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
-    }
 
     override fun onDestroy() {
         Intent(applicationContext, LocationService::class.java).apply {

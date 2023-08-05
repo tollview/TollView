@@ -2,21 +2,28 @@ package com.shinetech.tollview.util
 
 import android.content.Context
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.shinetech.tollview.models.Gate
+import com.shinetech.tollview.models.Toll
 import java.lang.Math.abs
+import java.sql.Timestamp
 
 
 class Utility(
     val applicationContext: Context
 ) {
     private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
+
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val gatesReference: DatabaseReference = database.reference.child("gates")
+    private val usersReference: DatabaseReference = database.reference.child("users")
+
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {
         fetchGatesFromDatabase { gates ->
@@ -86,4 +93,48 @@ class Utility(
 
         return leastDistGate
     }
+
+    fun getTollsForUser(callback: (ArrayList<Toll>) -> Unit) {
+        val tollsList: ArrayList<Toll> = ArrayList<Toll>()
+
+        println(auth.currentUser!!.uid)
+
+        val tollsReference = usersReference.child(auth.currentUser!!.uid).child("tolls")
+
+        tollsReference.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                tollsList.clear()
+
+                for (tollSnapshot in dataSnapshot.children) {
+
+                    val gateId = tollSnapshot.child("gateId").getValue(String::class.java) ?: ""
+                    val timestampMap = tollSnapshot.child("timestamp").getValue() as? Map<String, Any?>
+
+                    val timeLong = timestampMap?.get("time") as? Long
+                    val nanos = (timestampMap?.get("nanos") as? Long)?.toInt()
+
+                    val timestamp = if (timeLong != null) {
+                        Timestamp(timeLong).apply {
+                            this.nanos = nanos ?: 0
+                        }
+                    } else {
+                        null
+                    }
+
+                    val toll = Toll(gateId, timestamp)
+
+                    toll?.let {
+                        tollsList.add(toll)
+                    }
+                }
+
+                callback(tollsList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
 }
