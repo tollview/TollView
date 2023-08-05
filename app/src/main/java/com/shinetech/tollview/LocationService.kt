@@ -126,6 +126,9 @@ class LocationService: Service() {
                 if (isAtGate(closestGate) && timeoutExpired()) {
                     // incur toll
 
+                    val tollIncurred = Toll(closestGate.id, Timestamp(System.currentTimeMillis()))
+                    userTolls.add(tollIncurred)
+
                     println("YOU GOT A TOLL")
 
                 }
