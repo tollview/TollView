@@ -37,13 +37,14 @@ import java.util.Locale
 import kotlin.math.pow
 
 class LocationService: Service() {
-    private var MINIMUM_TOLL_REENTRY_TIME: Double = 1.0
-    private var DISTANCE_TUNING_PARAMETER: Double = 0.278
+    private var MINIMUM_TOLL_REENTRY_TIME: Double = 0.5
+    private var DISTANCE_TUNING_PARAMETER: Double = 0.015
+    private var PING_SPEED: Long = 1_300L
+
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var utility: Utility
     private lateinit var locationClient: LocationClient
 
-    private var PING_SPEED: Long = 2_000L
     private var numPings: Int = 0
 
     private var prevLongitude: Double = 0.0
@@ -222,15 +223,12 @@ class LocationService: Service() {
     private fun timeoutExpired(): Boolean {
 
         if (!userTolls.isNullOrEmpty()) {
-            println("Actually calculated it this time")
             val latestTollTimestamp = userTolls[userTolls.lastIndex].timestamp
             val currentTimestamp: Timestamp = Timestamp(System.currentTimeMillis())
 
 
             latestTollTimestamp?.let {
-                print("Go past the let")
                 val timeDelta: Double = (currentTimestamp.time - latestTollTimestamp.time)/60_000.0
-                println("delta: ${timeDelta}")
                 return timeDelta >= MINIMUM_TOLL_REENTRY_TIME
             }
         }
