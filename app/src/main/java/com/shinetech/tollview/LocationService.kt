@@ -164,6 +164,10 @@ class LocationService: Service() {
                     todayTotalCost += closestGate.cost
                     println("$todayTotalCost")
 
+                    val intent = Intent("com.shinetech.tollview.ACTION_GATE_TEXT")
+                    intent.putExtra(LocationServiceBroadcast.KEY_GATE_TEXT, "$${closestGate.cost} at ${closestGate.name}")
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
                     val updatedNotification = notification.setContentText(
                         "at ${closestGate.name}"
                     )
@@ -187,12 +191,6 @@ class LocationService: Service() {
                 intent.putExtra("closestToll", "${closestGate.name}")
                 intent.putExtra("tollDist", "${distanceBetweenCoords(closestGate.latitude, closestGate.longitude)} miles")
                 intent.putExtra("todayTotalCost", "$todayTotalCost")
-                sendBroadcast(intent)
-
-                println("hoping to send ${closestGate.cost} at ${closestGate.name}")
-
-                intent.action = "com.shinetech.tollview.ACTION_GATE_TEXT"
-                intent.putExtra(LocationServiceBroadcast.KEY_GATE_TEXT, "$${closestGate.cost} at ${closestGate.name}")
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
                 prevLatitude = currLatitude
