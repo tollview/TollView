@@ -55,6 +55,8 @@ class LocationService: Service() {
 
     private var userTolls: ArrayList<Toll> = ArrayList<Toll>()
 
+    var todayTotalCost: Double = 0.0
+
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             println("UPDATING VALUES!")
@@ -125,6 +127,7 @@ class LocationService: Service() {
                 println("------------------------------")
                 println("NEW PING: $numPings")
                 println("------------------------------")
+                println("todayTotal = ${todayTotalCost.toString()}")
 
                 currLatitude = location.latitude
                 currLongitude = location.longitude
@@ -158,6 +161,8 @@ class LocationService: Service() {
                     userTolls.add(tollIncurred)
 
                     println("YOU GOT A TOLL")
+                    todayTotalCost += closestGate.cost
+                    println("$todayTotalCost")
 
                     val updatedNotification = notification.setContentText(
                         "at ${closestGate.name}"
@@ -181,6 +186,7 @@ class LocationService: Service() {
                 intent.putExtra("roadName", "$roadName")
                 intent.putExtra("closestToll", "${closestGate.name}")
                 intent.putExtra("tollDist", "${distanceBetweenCoords(closestGate.latitude, closestGate.longitude)} miles")
+                intent.putExtra("todayTotalCost", "$todayTotalCost")
                 sendBroadcast(intent)
 
                 println("hoping to send ${closestGate.cost} at ${closestGate.name}")

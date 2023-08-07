@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var tvClosestToll: TextView
     lateinit var tvTollDistance: TextView
     lateinit var tvTollTerminal: TextView
+    lateinit var tvTodayTotalCost: TextView
 
     lateinit var sbDistToToll: SeekBar
     lateinit var sbReentryTime: SeekBar
@@ -76,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             tvClosestToll.text = closestToll
             val tollDist = intent.getStringExtra("tollDist")
             tvTollDistance.text = tollDist
+            val todayTotalCost = intent.getStringExtra("todayTotalCost")
+            tvTodayTotalCost.text = todayTotalCost
             val latestToll = intent.getStringExtra("latestToll")
             latestToll?.let { toll ->
                 tvTollTerminal.append("\n$latestToll")
@@ -122,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         tvRoadName = findViewById(R.id.tvRoadVar)
         tvClosestToll = findViewById(R.id.tvClosestTollVar)
         tvTollDistance = findViewById(R.id.tvTollDistVar)
+        tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
 
         sbDistToToll = findViewById(R.id.sbDistToToll)
         sbReentryTime = findViewById(R.id.sbReentryTime)
