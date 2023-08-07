@@ -10,6 +10,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationServices
 import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
@@ -182,6 +183,12 @@ class LocationService: Service() {
                 intent.putExtra("tollDist", "${distanceBetweenCoords(closestGate.latitude, closestGate.longitude)} miles")
                 sendBroadcast(intent)
 
+                println("hoping to send ${closestGate.cost} at ${closestGate.name}")
+
+                intent.action = "com.shinetech.tollview.ACTION_GATE_TEXT"
+                intent.putExtra(LocationServiceBroadcast.KEY_GATE_TEXT, "$${closestGate.cost} at ${closestGate.name}")
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
                 prevLatitude = currLatitude
                 prevLongitude = currLongitude
             }
@@ -298,5 +305,10 @@ class LocationService: Service() {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
+    }
+
+    object LocationServiceBroadcast {
+        const val ACTION_GATE_TEXT = "ACTION_GATE_TEXT"
+        const val KEY_GATE_TEXT = "KEY_GATE_TEXT"
     }
 }

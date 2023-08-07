@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var tvRoadName: TextView
     lateinit var tvClosestToll: TextView
     lateinit var tvTollDistance: TextView
+    lateinit var tvTollTerminal: TextView
 
     lateinit var sbDistToToll: SeekBar
     lateinit var sbReentryTime: SeekBar
@@ -74,8 +76,19 @@ class MainActivity : AppCompatActivity() {
             tvClosestToll.text = closestToll
             val tollDist = intent.getStringExtra("tollDist")
             tvTollDistance.text = tollDist
+            val latestToll = intent.getStringExtra("latestToll")
+            latestToll?.let { toll ->
+                tvTollTerminal.append("\n$latestToll")
+            }
+            when (intent.action) {
+                "com.shinetech.tollview.ACTION_GATE_TEXT" -> {
+                    val latestToll = intent.getStringExtra(LocationService.LocationServiceBroadcast.KEY_GATE_TEXT)
+                    tvTollTerminal.append("\n$latestToll")
+                }
+            }
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +136,8 @@ class MainActivity : AppCompatActivity() {
         tvReentryTimeValue.text = sbReentryTime.progress.toString()
         tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
 
+        tvTollTerminal = findViewById(R.id.tvTollTerminal)
+
         btnUpdateValues.setOnClickListener {
             val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
             intent.putExtra("distToToll", 0.001 + sbDistToToll.progress / 1000.0)
@@ -158,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
-        registerReceiver(receiver, filter)
+//        registerReceiver(receiver, filter)
 
 
         sbDistToToll.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -203,6 +218,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun addTextToTerminal(s: String) {
+        tvTollTerminal.append("\n$s")
     }
 
     private fun getAllGatesFromDatabase() {
@@ -280,6 +299,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 displayLatestToll()
+        addTextToTerminal("$${randomGate.cost} at ${randomGate.name}")
             }
         }
 
@@ -324,7 +344,18 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        val filter = IntentFilter()
+        filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
+        filter.addAction("com.shinetech.tollview.ACTION_GATE_TEXT")
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
+    }
     override fun onDestroy() {
         Intent(applicationContext, LocationService::class.java).apply {
             action = LocationService.ACTION_STOP
