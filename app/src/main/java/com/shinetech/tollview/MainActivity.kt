@@ -29,10 +29,10 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var utility: Utility
 
-    lateinit var btnSignOut: Button
-    lateinit var btnDebugGetAllGates: Button
-    lateinit var btnDebugGiveUserToll: Button
-    lateinit var btnDebugAssignRandomToll: Button
+    private lateinit var btnSignOut: Button
+    private lateinit var btnDebugGetAllGates: Button
+    private lateinit var btnDebugGiveUserToll: Button
+    private lateinit var btnDebugAssignRandomToll: Button
 
     lateinit var tvCurrentLocation: TextView
     lateinit var tvPrevLocation: TextView
