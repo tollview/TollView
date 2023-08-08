@@ -63,33 +63,6 @@ class MainActivity : AppCompatActivity() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-//            val currentLocation = intent.getStringExtra("currentLocation")
-//            tvCurrentLocation.text = currentLocation
-//            val previousLocation = intent.getStringExtra("previousLocation")
-//            tvPrevLocation.text = previousLocation
-//            val speed = intent.getStringExtra("speed")
-//            tvSpeed.text = speed
-//            val bearing = intent.getStringExtra("bearing")
-//            tvBearing.text = bearing
-//            val roadName = intent.getStringExtra("roadName")
-//            tvRoadName.text = roadName
-//            val closestToll = intent.getStringExtra("closestToll")
-//            tvClosestToll.text = closestToll
-//            val tollDist = intent.getStringExtra("tollDist")
-//            tvTollDistance.text = tollDist
-//            val todayTotalCost = intent.getStringExtra("todayTotalCost")
-//            tvTodayTotalCost.text = todayTotalCost
-//
-//            val latestToll = intent.getStringExtra("latestToll")
-//            latestToll?.let { toll ->
-//                tvTollTerminal.append("\n$latestToll")
-//            }
-//            when (intent.action) {
-//                "com.shinetech.tollview.ACTION_GATE_TEXT" -> {
-//                    val latestToll = intent.getStringExtra(LocationService.LocationServiceBroadcast.KEY_GATE_TEXT)
-//                    tvTollTerminal.append("\n$latestToll")
-//                }
-//            }
             when (intent.action) {
                 "com.shinetech.tollview.ACTION_GATE_TEXT" -> {
                     val latestToll = intent.getStringExtra(LocationService.LocationServiceBroadcast.KEY_GATE_TEXT)
@@ -113,8 +86,8 @@ class MainActivity : AppCompatActivity() {
                     val todayTotalCost = intent.getStringExtra("todayTotalCost")
                     tvTodayTotalCost.text = todayTotalCost
                     val latestToll = intent.getStringExtra("latestToll")
-                    latestToll?.let { toll ->
-                        tvTollTerminal.append("\n$latestToll")
+                    latestToll?.let {
+                        tvTollTerminal.append("\n$it")
                     }
                 }
             }
