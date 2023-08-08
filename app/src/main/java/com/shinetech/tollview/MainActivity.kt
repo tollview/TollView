@@ -257,13 +257,13 @@ class MainActivity : AppCompatActivity() {
 
         val tolls = ArrayList<Toll>()
 
-        val timestamp: Timestamp = Timestamp(234827042)
-        val toll: Toll = Toll("dummyString", timestamp)
+        val timestamp = Timestamp(234827042)
+        val toll = Toll("dummyString", timestamp)
         tolls.add(toll)
         tolls.add(toll)
         tolls.add(toll)
 
-        val user: User = User(tolls)
+        val user = User(tolls)
 
         println("User: $user")
 
@@ -294,8 +294,8 @@ class MainActivity : AppCompatActivity() {
                 val randomIndex: Int = Random.nextInt(gates.lastIndex+1)
                 val randomGate: Gate = gates[randomIndex]
 
-                val timestamp: Timestamp = Timestamp(System.currentTimeMillis())
-                val newToll: Toll = Toll(randomGate.id, timestamp)
+                val timestamp = Timestamp(System.currentTimeMillis())
+                val newToll = Toll(randomGate.id, timestamp)
 
                 tollsList.add(newToll)
 
