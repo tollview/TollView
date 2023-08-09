@@ -19,6 +19,7 @@ import com.shinetech.tollview.util.Utility
 import java.sql.Timestamp
 import kotlin.random.Random
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -248,7 +250,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun addUserToDatabase() {
+    private fun addUserToDatabase() {
 
         val id: String = auth.currentUser?.uid ?: return
 
@@ -278,7 +280,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun assignRandomToll() {
+    private fun assignRandomToll() {
         println("Getting tolls hopefully")
         utility.getTollsForUser { tolls ->
 
@@ -327,7 +329,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun retrieveGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
+    private fun retrieveGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
         val gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
         gatesReference.addListenerForSingleValueEvent(object: ValueEventListener {
