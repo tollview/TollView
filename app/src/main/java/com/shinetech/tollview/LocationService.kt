@@ -12,6 +12,9 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.util.LocationClient
@@ -55,6 +58,11 @@ class LocationService: Service() {
     private var bearing: Double = 0.0
 
     private var userTolls: ArrayList<Toll> = ArrayList<Toll>()
+
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val usersReference: DatabaseReference = database.reference.child("users")
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
 
     var todayTotalCost: Double = 0.0
 
@@ -300,6 +308,16 @@ class LocationService: Service() {
     }
 
     override fun onDestroy() {
+        utility.getTollsForUser { tolls ->
+            val userId: String = auth.currentUser!!.uid
+            var tollsToPush: ArrayList<Toll> = tolls
+            tollsToPush.addAll(userTolls)
+            usersReference.child(userId).child("tolls").setValue(tollsToPush).addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    utility.toastln("Error Synchronizing Tolls")
+                }
+            }
+        }
         super.onDestroy()
         serviceScope.cancel()
     }
