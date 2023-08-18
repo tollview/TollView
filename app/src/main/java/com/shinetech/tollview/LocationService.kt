@@ -167,6 +167,7 @@ class LocationService: Service() {
                     // incur toll
 
                     val tollIncurred = Toll(closestGate.id, Timestamp(System.currentTimeMillis()))
+                    val userId: String = auth.currentUser!!.uid
                     userTolls.add(tollIncurred)
 
                     println("YOU GOT A TOLL")
@@ -182,6 +183,15 @@ class LocationService: Service() {
                     )
                     notification.setContentTitle("$${closestGate.cost}")
                     notificationManager.notify(1, updatedNotification.build())
+
+                    utility.getTollsForUser { tolls ->
+                        tolls.add(tollIncurred)
+                        usersReference.child(userId).child("tolls").setValue(tolls).addOnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                utility.toastln("Error Adding Toll to Database")
+                            }
+                        }
+                    }
                 }
 
 

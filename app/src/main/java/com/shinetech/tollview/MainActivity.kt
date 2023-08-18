@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 displayLatestToll()
-        addTextToTerminal("$${randomGate.cost} at ${randomGate.name}")
+            addTextToTerminal("$${randomGate.cost} at ${randomGate.name}")
             }
         }
 
