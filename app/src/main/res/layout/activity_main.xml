@@ -20,34 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnDebugGiveDummyTolls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="248dp"
-        android:layout_marginBottom="2dp"
-        android:backgroundTint="@color/tvDebug"
-        android:fontFamily="@font/ubuntu_bold_italic"
-        android:text="Get Dummy Tolls"
-        android:textColor="@color/tvBlue"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnDebugGetAllGates"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnDebugAssignRandomToll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/tvDebug"
-        android:fontFamily="@font/ubuntu_bold_italic"
-        android:text="Random Toll"
-        android:textColor="@color/tvBlue"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnDebugGetAllGates"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
         android:id="@+id/btnSignOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,20 +28,6 @@
         android:backgroundTint="@color/tvAccentSoft"
         android:fontFamily="@font/ubuntu_bold_italic"
         android:text="Sign Out"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnDebugGetAllGates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="252dp"
-        android:layout_marginBottom="4dp"
-        android:backgroundTint="@color/tvDebug"
-        android:fontFamily="@font/ubuntu_bold_italic"
-        android:text="Get All Gates"
-        android:textColor="@color/tvBlue"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
