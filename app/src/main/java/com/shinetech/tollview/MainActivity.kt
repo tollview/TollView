@@ -36,13 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnDebugGiveUserToll: Button
     private lateinit var btnDebugAssignRandomToll: Button
 
-    lateinit var tvCurrentLocation: TextView
-    lateinit var tvPrevLocation: TextView
-    lateinit var tvSpeed: TextView
-    lateinit var tvBearing: TextView
-    lateinit var tvRoadName: TextView
-    lateinit var tvClosestToll: TextView
-    lateinit var tvTollDistance: TextView
     lateinit var tvTollTerminal: TextView
     lateinit var tvTodayTotalCost: TextView
 
@@ -70,20 +63,6 @@ class MainActivity : AppCompatActivity() {
                     tvTollTerminal.append("\n$latestToll")
                 }
                 "com.shinetech.tollview.DEBUG_UPDATE" -> {
-                    val currentLocation = intent.getStringExtra("currentLocation")
-                    tvCurrentLocation.text = currentLocation
-                    val previousLocation = intent.getStringExtra("previousLocation")
-                    tvPrevLocation.text = previousLocation
-                    val speed = intent.getStringExtra("speed")
-                    tvSpeed.text = speed
-                    val bearing = intent.getStringExtra("bearing")
-                    tvBearing.text = bearing
-                    val roadName = intent.getStringExtra("roadName")
-                    tvRoadName.text = roadName
-                    val closestToll = intent.getStringExtra("closestToll")
-                    tvClosestToll.text = closestToll
-                    val tollDist = intent.getStringExtra("tollDist")
-                    tvTollDistance.text = tollDist
                     val todayTotalCost = intent.getStringExtra("todayTotalCost")
                     tvTodayTotalCost.text = todayTotalCost
                     val latestToll = intent.getStringExtra("latestToll")
@@ -122,13 +101,6 @@ class MainActivity : AppCompatActivity() {
         btnDebugGiveUserToll = findViewById(R.id.btnDebugGiveDummyTolls)
         btnDebugAssignRandomToll = findViewById(R.id.btnDebugAssignRandomToll)
 
-        tvCurrentLocation = findViewById(R.id.tvCurrentVar)
-        tvPrevLocation = findViewById(R.id.tvPrevVar)
-        tvSpeed = findViewById(R.id.tvSpeedVar)
-        tvBearing = findViewById(R.id.tvBearingVar)
-        tvRoadName = findViewById(R.id.tvRoadVar)
-        tvClosestToll = findViewById(R.id.tvClosestTollVar)
-        tvTollDistance = findViewById(R.id.tvTollDistVar)
         tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
 
         sbDistToToll = findViewById(R.id.sbDistToToll)

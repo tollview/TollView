@@ -13,144 +13,11 @@
         android:id="@+id/tvDistToTollValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="24dp"
         android:text="null"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toEndOf="@+id/sbDistToToll"
-        app:layout_constraintTop_toBottomOf="@+id/tvTollDistVar" />
-
-    <TextView
-        android:id="@+id/tvPrevVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
-        android:layout_marginTop="720dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvSpeedVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvSpeed"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvBearingVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="280dp"
-        android:layout_marginTop="44dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvRoadVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="40dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvClosestTollVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="72dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvTollDistVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="236dp"
-        android:layout_marginTop="72dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvPrev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="392dp"
-        android:layout_marginTop="700dp"
-        android:text="Prev:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
-
-    <TextView
-        android:id="@+id/tvSpeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="260dp"
-        android:layout_marginTop="8dp"
-        android:text="Speed:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvBearing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="260dp"
-        android:layout_marginTop="20dp"
-        android:text="Bearing:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
-
-    <TextView
-        android:id="@+id/tvClosestToll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
-        android:text="ClosestToll:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
-
-    <TextView
-        android:id="@+id/tvTollDist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="224dp"
-        android:layout_marginTop="52dp"
-        android:text="TollDist:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
-
-    <TextView
-        android:id="@+id/tvRoadName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
-        android:text="Road:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/tvCurrent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCurrent" />
 
     <Button
         android:id="@+id/btnDebugGiveDummyTolls"
@@ -207,47 +74,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/tvCurrent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current:"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvCurrentVar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textColor="@color/tvDebug"
-        app:layout_constraintStart_toEndOf="@+id/tvCurrent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <SeekBar
         android:id="@+id/sbDistToToll"
         android:layout_width="201dp"
         android:layout_height="27dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         android:max="1999"
         app:layout_constraintStart_toEndOf="@+id/tvDistToToll"
-        app:layout_constraintTop_toBottomOf="@+id/tvTollDistVar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvDistToToll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="24dp"
 
         android:text="minDistToToll:"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTollDist" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvReentryTime"
@@ -338,7 +184,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.438" />
+        app:layout_constraintVertical_bias="0.258" />
 
     <TextView
         android:id="@+id/tvTodayTotalCost"
@@ -346,7 +192,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
         android:layout_marginEnd="177dp"
-        android:layout_marginBottom="292dp"
+        android:layout_marginBottom="204dp"
         android:text="0.0"
         android:textColor="@color/tvDebug"
         android:textSize="36dp"
