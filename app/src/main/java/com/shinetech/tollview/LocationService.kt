@@ -18,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.util.LocationClient
-import com.shinetech.tollview.util.Point
 import com.shinetech.tollview.util.Utility
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +63,7 @@ class LocationService: Service() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
 
-    var todayTotalCost: Double = 0.0
+    private var todayTotalCost: Double = 0.0
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
@@ -208,7 +207,7 @@ class LocationService: Service() {
                 intent.putExtra("bearing", "$bearing")
                 intent.putExtra("roadName", "$roadName")
                 intent.putExtra("closestToll", "${closestGate.name}")
-                intent.putExtra("tollDist", "${distanceBetweenCoords(closestGate.latitude, closestGate.longitude)} miles")
+                intent.putExtra("tollDist", "${distanceBetweenPoints(closestGate.latitude, closestGate.longitude)} miles")
                 intent.putExtra("todayTotalCost", "$todayTotalCost")
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
@@ -220,8 +219,8 @@ class LocationService: Service() {
         startForeground(1, notification.build())
     }
 
-    fun distanceBetweenCoords(otherLat: Double, otherLong: Double): Double {
-        val R = 3958.8 // radius of Earth in miles
+    private fun distanceBetweenPoints(otherLat: Double, otherLong: Double): Double {
+        val earthRadius = 3958.8 // in mi
         val lat1 = currLatitude * PI / 180
         val lon1 = currLongitude * PI / 180
         val lat2 = otherLat * PI / 180
@@ -233,9 +232,7 @@ class LocationService: Service() {
         val a = sin(dlat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(dlon / 2).pow(2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-        val distance = R * c
-
-        return distance
+        return earthRadius * c
     }
 
     private fun timeoutExpired(): Boolean {
@@ -255,11 +252,11 @@ class LocationService: Service() {
     }
 
     private fun isAtGate(closestGate: Gate): Boolean {
-        val distance = distanceBetweenCoords(closestGate.latitude, closestGate.longitude)
+        val distance = distanceBetweenPoints(closestGate.latitude, closestGate.longitude)
         return distance <= DISTANCE_TUNING_PARAMETER
     }
 
-    fun getRoadName(latitude: Double, longitude: Double, context: Context): String {
+    private fun getRoadName(latitude: Double, longitude: Double, context: Context): String {
 
         val geocoder = Geocoder(context, Locale.getDefault())
         val addresses: List<Address>?

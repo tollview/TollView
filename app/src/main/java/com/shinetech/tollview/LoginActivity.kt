@@ -10,10 +10,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.shinetech.tollview.util.Utility
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var editTextEmail: EditText
-    lateinit var editTextPassword: EditText
-    lateinit var btnLogIn: Button
-    lateinit var btnSignUp: Button
+    private lateinit var editTextEmail: EditText
+    private lateinit var editTextPassword: EditText
+    private lateinit var btnLogIn: Button
+    private lateinit var btnSignUp: Button
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var utility: Utility

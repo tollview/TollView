@@ -10,13 +10,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
-import java.lang.Math.abs
 import java.sql.Timestamp
 
 
-class Utility(
-    val applicationContext: Context
-) {
+class Utility(private val applicationContext: Context) {
     private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -47,7 +44,7 @@ class Utility(
         toastln("$name: $s")
     }
 
-    fun fetchGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
+    private fun fetchGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
         val gatesList: ArrayList<Gate> = ArrayList<Gate>()
 
         gatesReference.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -78,11 +75,11 @@ class Utility(
 
         gatesList.forEach { other ->
 
-            val other_lat = other.latitude
-            val other_long = other.longitude
+            val otherLat = other.latitude
+            val otherLong = other.longitude
 
             // Compute distance
-            val currentDist = currentGPS.distanceToOtherPoint(Point(other_lat, other_long))
+            val currentDist = currentGPS.distanceToOtherPoint(Point(otherLat, otherLong))
 
             if (currentDist < leastDist) {
                 leastDist = currentDist
