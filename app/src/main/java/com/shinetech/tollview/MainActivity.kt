@@ -18,21 +18,17 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var utility: Utility
-
+    private lateinit var utility: Utility
     private lateinit var btnSignOut: Button
-
+    private lateinit var btnUpdateValues: Button
+    private lateinit var sbDistToToll: SeekBar
+    private lateinit var sbReentryTime: SeekBar
+    private lateinit var sbPingSpeed: SeekBar
     lateinit var tvTollTerminal: TextView
     lateinit var tvTodayTotalCost: TextView
-
-    lateinit var sbDistToToll: SeekBar
-    lateinit var sbReentryTime: SeekBar
-    lateinit var sbPingSpeed: SeekBar
     lateinit var tvDistToTollValue: TextView
     lateinit var tvReentryTimeValue: TextView
     lateinit var tvPingSpeedValue: TextView
-    lateinit var btnUpdateValues: Button
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val receiver = object : BroadcastReceiver() {
@@ -53,8 +49,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,8 +109,6 @@ class MainActivity : AppCompatActivity() {
 
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
-//        registerReceiver(receiver, filter)
-
 
         sbDistToToll.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -124,11 +116,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // You can add code here if needed when tracking starts
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // You can add code here if needed when tracking stops
             }
         })
 
@@ -138,11 +128,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // You can add code here if needed when tracking starts
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // You can add code here if needed when tracking stops
             }
         })
 
@@ -152,11 +140,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // You can add code here if needed when tracking starts
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // You can add code here if needed when tracking stops
             }
         })
 
@@ -168,7 +154,6 @@ class MainActivity : AppCompatActivity() {
         filter.addAction("com.shinetech.tollview.ACTION_GATE_TEXT")
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
     }
-
     override fun onPause() {
         super.onPause()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
