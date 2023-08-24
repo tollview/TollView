@@ -70,24 +70,19 @@ class MainActivity : AppCompatActivity() {
 
         utility = Utility(applicationContext)
 
-        btnSignOut = findViewById(R.id.btnSignOut)
-
-        tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
-
         sbDistToToll = findViewById(R.id.sbDistToToll)
         sbReentryTime = findViewById(R.id.sbReentryTime)
         sbPingSpeed = findViewById(R.id.sbPingSpeed)
+        btnSignOut = findViewById(R.id.btnSignOut)
+        btnUpdateValues = findViewById(R.id.btnUpdateValues)
+        tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
         tvDistToTollValue = findViewById(R.id.tvDistToTollValue)
         tvReentryTimeValue = findViewById(R.id.tvReentryTimeValue)
-        tvPingSpeedValue = findViewById(R.id.tvPingSpeedValue)
-
-        btnUpdateValues = findViewById(R.id.btnUpdateValues)
-
-        tvDistToTollValue.text = String.format("%.3f", 0.001 + sbDistToToll.progress / 1000.0)
         tvReentryTimeValue.text = sbReentryTime.progress.toString()
-        tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
-
+        tvPingSpeedValue = findViewById(R.id.tvPingSpeedValue)
         tvTollTerminal = findViewById(R.id.tvTollTerminal)
+        tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
+        tvDistToTollValue.text = String.format("%.3f", 0.001 + sbDistToToll.progress / 1000.0)
 
         btnUpdateValues.setOnClickListener {
             val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
@@ -96,7 +91,6 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("pingSpeed", ((sbPingSpeed.progress / 100.0) + 1.0) * 1000L)
             sendBroadcast(intent)
         }
-
 
         btnSignOut.setOnClickListener{
             btnSignOut.isClickable = false
@@ -149,9 +143,10 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        val filter = IntentFilter()
-        filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
-        filter.addAction("com.shinetech.tollview.ACTION_GATE_TEXT")
+        val filter = IntentFilter().apply {
+            addAction("com.shinetech.tollview.DEBUG_UPDATE")
+            addAction("com.shinetech.tollview.ACTION_GATE_TEXT")
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
     }
     override fun onPause() {
