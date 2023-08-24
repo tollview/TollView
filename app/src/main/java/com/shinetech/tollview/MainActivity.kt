@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.shinetech.tollview.util.Utility
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
@@ -15,6 +16,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
+@SuppressLint("SetTextI18n")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var utility: Utility
@@ -102,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         sbPingSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 tvPingSpeedValue.text = ((progress / 100.0) + 1.0).toString()
             }
