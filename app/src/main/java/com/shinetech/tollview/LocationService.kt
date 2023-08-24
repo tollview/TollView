@@ -187,7 +187,7 @@ class LocationService: Service() {
                         tolls.add(tollIncurred)
                         usersReference.child(userId).child("tolls").setValue(tolls).addOnCompleteListener { task ->
                             if (!task.isSuccessful) {
-                                utility.toastln("Error Adding Toll to Database")
+                                utility.toast("Error Adding Toll to Database")
                             }
                         }
                     }
@@ -316,7 +316,7 @@ class LocationService: Service() {
             tollsToPush.addAll(userTolls)
             usersReference.child(userId).child("tolls").setValue(tollsToPush).addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    utility.toastln("Error Synchronizing Tolls")
+                    utility.toast("Error Synchronizing Tolls")
                 }
             }
         }

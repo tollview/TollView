@@ -12,9 +12,8 @@ import com.shinetech.tollview.models.Gate
 import com.shinetech.tollview.models.Toll
 import java.sql.Timestamp
 
-
 class Utility(private val applicationContext: Context) {
-    private var gatesList: ArrayList<Gate> = ArrayList<Gate>()
+    private var gatesList: ArrayList<Gate> = ArrayList()
 
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val gatesReference: DatabaseReference = database.reference.child("gates")
@@ -23,15 +22,12 @@ class Utility(private val applicationContext: Context) {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {
-        fetchGatesFromDatabase { gates ->
-            gates.forEach {
-                gatesList.add(it)
-            }
+        fetchGatesFromDatabase {
+            gatesList = it
         }
-
     }
 
-    fun toastln(s: String) {
+    fun toast(s: String) {
         Toast.makeText(
             applicationContext,
             s,
@@ -39,9 +35,9 @@ class Utility(private val applicationContext: Context) {
         ).show()
     }
 
-    fun woof(name: String, s: String) {
+    fun debug(name: String, s: String) {
         println("$name: $s")
-        toastln("$name: $s")
+        toast("$name: $s")
     }
 
     private fun fetchGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
