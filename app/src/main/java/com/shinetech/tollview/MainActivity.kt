@@ -56,14 +56,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         utility = Utility(applicationContext)
 
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            0
-        )
+        requestPermissions()
 
         Intent(applicationContext, LocationService::class.java).apply {
             action = LocationService.ACTION_START
@@ -78,6 +71,16 @@ class MainActivity : AppCompatActivity() {
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
     }
 
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            0
+        )
+    }
     private fun setupSeekBars() {
         sbDistToToll.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
