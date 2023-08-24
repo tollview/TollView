@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.shinetech.tollview.util.Utility
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
@@ -49,10 +48,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    @SuppressLint("SetTextI18n")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        utility = Utility(applicationContext)
 
         ActivityCompat.requestPermissions(
             this,
@@ -68,27 +68,15 @@ class MainActivity : AppCompatActivity() {
             startService(this)
         }
 
-        utility = Utility(applicationContext)
-
-        sbDistToToll = findViewById(R.id.sbDistToToll)
-        sbReentryTime = findViewById(R.id.sbReentryTime)
-        sbPingSpeed = findViewById(R.id.sbPingSpeed)
-        btnSignOut = findViewById(R.id.btnSignOut)
-        btnUpdateValues = findViewById(R.id.btnUpdateValues)
-        tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
-        tvDistToTollValue = findViewById(R.id.tvDistToTollValue)
-        tvReentryTimeValue = findViewById(R.id.tvReentryTimeValue)
-        tvReentryTimeValue.text = sbReentryTime.progress.toString()
-        tvPingSpeedValue = findViewById(R.id.tvPingSpeedValue)
-        tvTollTerminal = findViewById(R.id.tvTollTerminal)
-        tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
-        tvDistToTollValue.text = String.format("%.3f", 0.001 + sbDistToToll.progress / 1000.0)
-
+        setupViewsById()
         setupButtons()
+        setupSeekBars()
 
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
+    }
 
+    private fun setupSeekBars() {
         sbDistToToll.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 tvDistToTollValue.text = String.format("%.3f", 0.001 + progress / 1000.0)
@@ -124,10 +112,22 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
-
-
     }
-
+    private fun setupViewsById() {
+        sbDistToToll = findViewById(R.id.sbDistToToll)
+        sbReentryTime = findViewById(R.id.sbReentryTime)
+        sbPingSpeed = findViewById(R.id.sbPingSpeed)
+        btnSignOut = findViewById(R.id.btnSignOut)
+        btnUpdateValues = findViewById(R.id.btnUpdateValues)
+        tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
+        tvDistToTollValue = findViewById(R.id.tvDistToTollValue)
+        tvReentryTimeValue = findViewById(R.id.tvReentryTimeValue)
+        tvReentryTimeValue.text = sbReentryTime.progress.toString()
+        tvPingSpeedValue = findViewById(R.id.tvPingSpeedValue)
+        tvTollTerminal = findViewById(R.id.tvTollTerminal)
+        tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
+        tvDistToTollValue.text = String.format("%.3f", 0.001 + sbDistToToll.progress / 1000.0)
+    }
     private fun setupButtons() {
         btnUpdateValues.setOnClickListener {
             val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
@@ -145,7 +145,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
     override fun onResume() {
         super.onResume()
         val filter = IntentFilter().apply {
