@@ -84,22 +84,7 @@ class MainActivity : AppCompatActivity() {
         tvPingSpeedValue.text = ((sbPingSpeed.progress / 100.0) + 1.0).toString()
         tvDistToTollValue.text = String.format("%.3f", 0.001 + sbDistToToll.progress / 1000.0)
 
-        btnUpdateValues.setOnClickListener {
-            val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
-            intent.putExtra("distToToll", 0.001 + sbDistToToll.progress / 1000.0)
-            intent.putExtra("reentryTime", sbReentryTime.progress / 100.0)
-            intent.putExtra("pingSpeed", ((sbPingSpeed.progress / 100.0) + 1.0) * 1000L)
-            sendBroadcast(intent)
-        }
-
-        btnSignOut.setOnClickListener{
-            btnSignOut.isClickable = false
-            auth.signOut()
-            utility.woof("Signed Out", "Stupid")
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+        setupButtons()
 
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE")
@@ -140,7 +125,27 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+
     }
+
+    private fun setupButtons() {
+        btnUpdateValues.setOnClickListener {
+            val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
+            intent.putExtra("distToToll", 0.001 + sbDistToToll.progress / 1000.0)
+            intent.putExtra("reentryTime", sbReentryTime.progress / 100.0)
+            intent.putExtra("pingSpeed", ((sbPingSpeed.progress / 100.0) + 1.0) * 1000L)
+            sendBroadcast(intent)
+        }
+
+        btnSignOut.setOnClickListener {
+            btnSignOut.isClickable = false
+            auth.signOut()
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         val filter = IntentFilter().apply {
