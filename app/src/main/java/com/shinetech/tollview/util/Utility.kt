@@ -13,13 +13,11 @@ import com.shinetech.tollview.models.Toll
 import java.sql.Timestamp
 
 class Utility(private val applicationContext: Context) {
-    private var gatesList: ArrayList<Gate> = ArrayList()
-
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val gatesReference: DatabaseReference = database.reference.child("gates")
     private val usersReference: DatabaseReference = database.reference.child("users")
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var gatesList: ArrayList<Gate> = ArrayList()
 
     init {
         fetchGatesFromDatabase {
@@ -27,21 +25,9 @@ class Utility(private val applicationContext: Context) {
         }
     }
 
-    fun toast(s: String) {
-        Toast.makeText(
-            applicationContext,
-            s,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    fun debug(name: String, s: String) {
-        println("$name: $s")
-        toast("$name: $s")
-    }
 
     private fun fetchGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
-        val gatesList: ArrayList<Gate> = ArrayList<Gate>()
+        val gatesList: ArrayList<Gate> = ArrayList()
 
         gatesReference.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -64,10 +50,10 @@ class Utility(private val applicationContext: Context) {
     }
 
     fun getClosestGate(lat: Double, long: Double): Gate {
-        val currentGPS:Point = Point(lat, long)
+        val currentGPS = Point(lat, long)
 
-        var leastDist: Double = 999999999.0
-        var leastDistGate: Gate = Gate()
+        var leastDist = 999999999.0
+        var leastDistGate = Gate()
 
         gatesList.forEach { other ->
 
@@ -88,7 +74,7 @@ class Utility(private val applicationContext: Context) {
     }
 
     fun getTollsForUser(callback: (ArrayList<Toll>) -> Unit) {
-        val tollsList: ArrayList<Toll> = ArrayList<Toll>()
+        val tollsList: ArrayList<Toll> = ArrayList()
 
         println(auth.currentUser!!.uid)
 
@@ -101,23 +87,25 @@ class Utility(private val applicationContext: Context) {
                 for (tollSnapshot in dataSnapshot.children) {
 
                     val gateId = tollSnapshot.child("gateId").getValue(String::class.java) ?: ""
-                    val timestampMap = tollSnapshot.child("timestamp").getValue() as? Map<String, Any?>
+                    val timestampMap = tollSnapshot.child("timestamp").value as? Map<String, Any?>
 
-                    val timeLong = timestampMap?.get("time") as? Long
-                    val nanos = (timestampMap?.get("nanos") as? Long)?.toInt()
+                    timestampMap.let {
+                        val timeLong = timestampMap?.get("time") as? Long
+                        val nanos = (timestampMap?.get("nanos") as? Long)?.toInt()
 
-                    val timestamp = if (timeLong != null) {
-                        Timestamp(timeLong).apply {
-                            this.nanos = nanos ?: 0
+                        val timestamp = if (timeLong != null) {
+                            Timestamp(timeLong).apply {
+                                this.nanos = nanos ?: 0
+                            }
+                        } else {
+                            null
                         }
-                    } else {
-                        null
-                    }
 
-                    val toll = Toll(gateId, timestamp)
+                        val toll = Toll(gateId, timestamp)
 
-                    toll?.let {
-                        tollsList.add(toll)
+                        toll.let {
+                            tollsList.add(toll)
+                        }
                     }
                 }
 
@@ -130,4 +118,15 @@ class Utility(private val applicationContext: Context) {
         })
     }
 
+    fun toast(s: String) {
+        Toast.makeText(
+            applicationContext,
+            s,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+    fun debug(name: String, s: String) {
+        println("$name: $s")
+        toast("$name: $s")
+    }
 }
