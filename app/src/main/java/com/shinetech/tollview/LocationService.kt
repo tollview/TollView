@@ -30,13 +30,13 @@ import java.lang.Exception
 import java.lang.Math.PI
 import java.lang.Math.atan2
 import java.lang.Math.cos
-import java.lang.Math.sin
 import java.lang.Math.sqrt
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
 import java.sql.Timestamp
 import java.util.Locale
 import kotlin.math.pow
+import java.lang.Math.sin
 
 class LocationService: Service() {
     private var MINIMUM_TOLL_REENTRY_TIME: Double = 0.5
@@ -91,10 +91,8 @@ class LocationService: Service() {
         )
         utility = Utility(applicationContext)
 
-        utility.getTollsForUser { tolls ->
-            tolls.forEach {
-                userTolls.add(it)
-            }
+        utility.getTollsForUser {
+            userTolls = it
         }
     }
 
@@ -184,14 +182,14 @@ class LocationService: Service() {
     private fun distanceBetweenPoints(otherLat: Double, otherLong: Double): Double {
         val earthRadius = 3958.8 // in mi
         val lat1 = currLatitude * PI / 180
-        val lon1 = currLongitude * PI / 180
+        val long1 = currLongitude * PI / 180
         val lat2 = otherLat * PI / 180
         val lon2 = otherLong * PI / 180
 
-        val dlat = lat2 - lat1
-        val dlon = lon2 - lon1
+        val distLat = lat2 - lat1
+        val distLong = lon2 - long1
 
-        val a = sin(dlat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(dlon / 2).pow(2)
+        val a = sin(distLat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(distLong / 2).pow(2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
         return earthRadius * c
@@ -271,7 +269,7 @@ class LocationService: Service() {
     override fun onDestroy() {
         utility.getTollsForUser { tolls ->
             val userId: String = auth.currentUser!!.uid
-            var tollsToPush: ArrayList<Toll> = tolls
+            val tollsToPush: ArrayList<Toll> = tolls
             tollsToPush.addAll(userTolls)
             usersReference.child(userId).child("tolls").setValue(tollsToPush).addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
