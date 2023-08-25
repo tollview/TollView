@@ -1,0 +1,441 @@
+commit 8f1e36fb90ec42899120bcd2cac8bc44514e91eb
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Thu Aug 24 00:58:16 2023 -0500
+
+    extracted requestPermissions to function
+
+commit e3aaf14c2bd398810f4cf2d660e509412639c5ee
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Thu Aug 24 00:54:20 2023 -0500
+
+    added not null check to toll map before adding to timestampMap
+
+commit 2c14d2fc0a2fa2f0414f8a9dcb3deeb0adbbfdfc
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Wed Aug 23 23:30:26 2023 -0600
+
+    refactored init in Utility
+
+commit 75a5609033a94e400eafebefc1ad499bfa2ea8b6
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Wed Aug 23 23:16:11 2023 -0600
+
+    silenced compiler warnings
+
+commit cff63d8683b0f3f7880016f769d662121871fa07
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Thu Aug 24 00:10:53 2023 -0500
+
+    extracted all setup functions to improve readability of onCreate
+
+commit 1bde2d34db47f13a400987db3da293160c427fdb
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Wed Aug 23 23:00:05 2023 -0600
+
+    consolidated button setup into helper function
+
+commit a31576b07a506471b9aece4e0f80b49e62678eb4
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Wed Aug 23 23:43:37 2023 -0500
+
+    reorganized with an apply block in onResume
+
+commit 6e42e6c340b50771efbeef144780b178e5dc796c
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Wed Aug 23 14:06:57 2023 -0500
+
+    made all relevant variables & functions private; refactored some variable names to follow capitalization convention
+
+commit 472ec49b3a1adab7eeca85ca2b5b9b395b8eb8f7
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Wed Aug 23 13:56:28 2023 -0500
+
+    made utility pointer and seekbar IDs private
+
+commit 15ccd972773e34bc1a5824dc9c5333776c3f1707
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Thu Aug 17 23:45:19 2023 -0600
+
+    removed unused lines in LocationService
+
+commit 43c78f58b3f52688be0140b0aaec33a815789031
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Aug 18 00:42:31 2023 -0500
+
+    removed all unneeded debug buttons, functionality, and textViews
+
+commit 5b3b7b9746ee2ae9792cc35568a49daaf1ad1482
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Aug 18 00:31:37 2023 -0500
+
+    removed debug textViews
+
+commit 6d466834c322ad546e6b28249d18aaf9a17625b7
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Aug 18 00:08:59 2023 -0500
+
+    Tolls sync to database on incurrence
+
+commit 41c2d2819778d75107b2992b3c847a6c9f42e4ae
+Merge: 6b0a1d3 6fee8c7
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Wed Aug 9 22:40:25 2023 -0500
+
+    Merge branch 'master' of github.com:ryan-dfw/TollView
+
+commit 6b0a1d35170f14b6eb3f8bf9973f3c6fe1636cda
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Wed Aug 9 22:36:00 2023 -0500
+
+    added placeholder icon
+
+commit 6fee8c73ccbc550324564bd63b310b181ed3d666
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Wed Aug 9 01:18:01 2023 -0500
+
+    Added README
+
+commit d2afa24327681d8fb1820dcc46873f93f9e4e070
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Tue Aug 8 23:25:18 2023 -0500
+
+    small code style revisions
+
+commit 56b9e34648ade0213ae676f9789f858877bb4346
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Mon Aug 7 23:53:00 2023 -0500
+
+    moved unnecessary textview from activity main
+
+commit c28dc5fa35a58aedf47e4589a4b0b6a14e3e5c24
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Mon Aug 7 23:50:27 2023 -0500
+
+    cleaned up MainActivity
+
+commit b9a63747c1f06ce314a8bd3442d1fcdce5797df8
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Mon Aug 7 23:47:18 2023 -0500
+
+    cleaned up MainActivity
+
+commit 354746c65a2ff420537fa6aa23ca1a0a046a2689
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Aug 7 13:33:40 2023 -0500
+
+    tuned 3 core parameters: Time- 0.5, Dist- 0.015, Ping- 1300
+
+commit 851678c6f72837929fd5d9f3c90249fe5bdd8972
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Aug 7 13:28:43 2023 -0500
+
+    tolls log every toll; total cost updates every ping. LocalBroadcastManager now required for all intents
+
+commit 622e2d1107b8f44e530306fd957c16c5831618a3
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Aug 7 13:05:30 2023 -0500
+
+    added a display for updating total cost, but terminal updates per ping not per toll incurrence
+
+commit 9da663cbf9c05e0fcee9e8e3af8ce688f93cf7e5
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Aug 7 12:02:24 2023 -0500
+
+    implemented terminal view in MainActivity to display tolls recieved as text
+
+commit fccd175e62165bcb4a00c18569c22fecddc9ef4e
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sun Aug 6 23:58:00 2023 -0500
+
+    made instance vars in MainActivity private
+
+commit f99839394f5efdb437af72286b1850a1104c6091
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 17:36:21 2023 -0500
+
+    adjusted upper bound of minTollDist to 2
+
+commit 67417f36345ddbb3a64469a1fe965826d31d9dd9
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 17:32:23 2023 -0500
+
+    fixed curvature of earth error
+
+commit f3ad3c480be0db6fa1277c530398d34e7769660f
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 17:24:45 2023 -0500
+
+    added debug sliders
+
+commit 535d289fea212ea655c3e0d280607a0687e46956
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 15:08:55 2023 -0500
+
+    added notification when incurring a toll
+
+commit c9bdeb8a90aef79ce6bc8629bb17b2791f4bd8b2
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 05:19:25 2023 -0500
+
+    added to local tolls list
+
+commit 372a409d9856363eb4fa7931204b4a3d886fea9e
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 05:02:05 2023 -0500
+
+    fixed timeoutExpired() and added local copy of userTolls
+
+commit e3e82daaa5603f9e09d2379399dfe30e07414cd0
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sat Aug 5 00:33:41 2023 -0500
+
+    added timeoutExpired, debugging now
+
+commit 9b1c6383a27481d27e27fbf062055a05a8e560b4
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Aug 4 22:14:25 2023 -0500
+
+    refactored getAllTolls function to be in utility
+
+commit 4448972b51eed1493c6ce724984858c81f65db32
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Aug 4 22:10:07 2023 -0500
+
+    started isAtGate()
+
+commit d8f6331d0d1df48828b0c347cdea985deed301e2
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 28 23:36:14 2023 -0500
+
+    fixed bug in if else logic that was  preventing bearing calculation
+
+commit 785a0772e3738277f02b77f2b9734cf7e1600520
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 28 19:51:30 2023 -0500
+
+    linked all debug values via broadcast
+
+commit ec0922b1fc8750b5bebbaad045b99e0f01b41aad
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Jul 28 19:30:07 2023 -0500
+
+    fixed constraint issue
+
+commit a27c600d8e2a21cc917964af03725a7d046a7131
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 28 19:24:18 2023 -0500
+
+    sent intent via broadcast from LocationService to MainActivity
+
+commit eaa72cc7b9da447e9eae68535091a7d02556fbf5
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 28 18:54:11 2023 -0500
+
+    linked vars to textviews
+
+commit 69c02e4b7559d393de883d7b620b053608dee621
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 28 18:47:29 2023 -0500
+
+    updated main page with proper value displays
+
+commit ee9a25d8a4eb1acc7e187cca67ce9bde62908ca0
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 28 18:42:39 2023 -0500
+
+    prepared HUD w/ debug values
+
+commit 0f9b2144c2820e8faf28b283727301d13b9e24f1
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Jul 28 17:31:49 2023 -0500
+
+    cleaned up getRoadName()
+
+commit b0cd0835b2e741e1dac5a6f64d31c870a21c74e3
+Merge: ee23221 d655b2c
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Jul 28 01:11:30 2023 -0500
+
+    fixed merge conflicts from divergent branches
+
+commit ee23221dc0854e7a2b828400dd0a88fd529e7dfa
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Jul 28 01:08:49 2023 -0500
+
+    used location services to get current road name, speed, and bearing via calculation
+
+commit d655b2c4c24b5770e767b204db6c43715294d8cf
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Jul 24 00:04:23 2023 -0500
+
+    implemented continuous display of closest gate to current position
+
+commit aa4f2536402aca838b1547ede4e8bfef8e467922
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Thu Jul 20 23:19:56 2023 -0500
+
+    added a point class and prepared a utility function to find closest gate to point
+
+commit 0015d86ccabfa4a6fd412b7e4d4fe0efcae45a3c
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Thu Jul 20 00:21:36 2023 -0500
+
+    implemented location service launched in main activity
+
+commit 14a961a4064c201f458a123d9324fea5a3212951
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Wed Jul 19 23:37:16 2023 -0500
+
+    implemented default location client
+
+commit 94ff2c7bec30fe21177cbb5d62d5b3186dc06f26
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Jul 17 23:20:39 2023 -0500
+
+    latest toll (incl debug random entries) now reports name & cost as a toast
+
+commit 0f3192dec27d74592f44c9e99ddc7c1b3777898c
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Mon Jul 17 22:58:43 2023 -0500
+
+    finished functionality to add random toll to DB. replaced addValueEventListener with addListenerForSingleValueEvent
+
+commit 50588ded6619f41e5eeabd363959576e3973dfd9
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Sun Jul 16 18:54:49 2023 -0500
+
+    added random toll to DB; bug: toll data overwritten on update
+
+commit fcd7d8da1f4b6b63a4bd93af51d581c2a9109086
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Sun Jul 16 18:28:18 2023 -0500
+
+    Get Random Toll button now toasts name of toll at random position
+
+commit db1d40c110e6261689cd3a8df3ec227f46fce6e3
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sun Jul 16 17:42:05 2023 -0500
+
+    added functionality to filter gates by cost
+
+commit 192a30d6d218e59e4d7159b8d289895199da7f75
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Sun Jul 16 17:21:04 2023 -0500
+
+    'Random Toll' button will fetch gates from DB & println a name for each
+
+commit 84b3b05a72bc62a28dd88180259dc0da1c1aa81e
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sun Jul 16 16:29:06 2023 -0500
+
+    Added functionality to add users to realtime DB
+
+commit 52818230d610548721de392117931519ea4ec794
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sun Jul 16 16:03:38 2023 -0500
+
+    Added data classes for User and Toll
+
+commit 720c25969a4d9941900c81da9efc6f70728fe439
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sun Jul 16 15:52:59 2023 -0500
+
+    Added button which will add user to DB, functionality still not implemented
+
+commit ae7bb7850ceb0a2c25255956092ce8cd1e2c74d2
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Sun Jul 16 14:32:38 2023 -0500
+
+    moved Gates data class to model package
+
+commit c8dab63e54ab0423cfadb4d85f50c7fd7b2e96ef
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Fri Jul 14 19:12:53 2023 -0500
+
+    added gatesList to save gates from DB to
+
+commit f4c512e74413dbf45d6ff3811d473aaf080abf30
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 14 19:03:45 2023 -0500
+
+    added Gate data model & implemented Gates retrieval from database
+
+commit 5462089db3ec4f2cb918cd35d69a277c1b76fa36
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Fri Jul 14 18:20:12 2023 -0500
+
+    added a debugging button to get all gates
+
+commit d2186590be482fb6afb6083030925a3a47a2c06b
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Tue Jul 11 17:44:37 2023 -0500
+
+    swapped sign up / log in button placement on login screen for readability
+
+commit 9224273c4aa221408e02057ccc97453d701c17b9
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Tue Jul 11 17:39:10 2023 -0500
+
+    Moved utility functions to utility class, refactored usages
+
+commit 584c64c917288d4b23a5c3884af62dfed496bc41
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Tue Jul 11 17:30:15 2023 -0500
+
+    added sign out button
+
+commit 9b038cc4ee2e8a24592c5c418ae1ea71f0d83b52
+Merge: 0242867 63086a9
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Tue Jul 11 17:11:11 2023 -0500
+
+    Merge branch 'master' of github.com:ryan-dfw/TollView
+     the commitf
+
+commit 0242867f13f0c561c6a756b42312ef35ef72bef5
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Tue Jul 11 17:09:27 2023 -0500
+
+    made the main page more visibly the main page
+
+commit 63086a9d4abd290640982f46728d5ba997eff9ae
+Author: Eric McKevitt <erictmckevitt@gmail.com>
+Date:   Tue Jul 11 16:57:49 2023 -0500
+
+    made auth private, removed unused declarations for email and password
+
+commit d74cb6eaebe2103c5f7875096f175b1898e9302d
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Jul 10 23:29:23 2023 -0500
+
+    added firebase user authentication
+
+commit 7686fa64018406072d233aba9903519973f2dca5
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Jul 10 22:53:25 2023 -0500
+
+    created EditText fields & login/signup buttons; moved to LoginActivity page. No functionality currently.
+
+commit aa695976ed92aa6c2b9058a11ea1c81ffbb8a2ce
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Jul 10 22:23:41 2023 -0500
+
+    on SDK 34, prepared email & pw EditTexts to be moved to a LoginActivity
+
+commit d6314c4fc17fb9b201d10a31fe238b34d66a179d
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Mon Jul 10 20:32:47 2023 -0500
+
+    added google services json
+
+commit aa52ee624c39188c75d21c3e692e1c388571ebb4
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Sun Jul 9 18:19:43 2023 -0500
+
+    added license
+
+commit 245f0d8742a1e59dc451f594128b916d0b21a91e
+Author: gdknas <mckevitt.r@gmail.com>
+Date:   Sun Jul 9 18:18:22 2023 -0500
+
+    first commit
