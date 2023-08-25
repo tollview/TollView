@@ -109,7 +109,8 @@ class LocationService: Service() {
             .setContentTitle("Welcome to TollView")
             .setContentText("Viewing Tolls...")
             .setSmallIcon(com.google.android.material.R.drawable.design_password_eye)
-            .setOngoing(false)
+//            .setOngoing(true)
+        // TODO: break this notification off into two. Tracking checker is its own ongoing; tolls are viewed on another.
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -125,45 +126,10 @@ class LocationService: Service() {
                 currLatitude = location.latitude
                 currLongitude = location.longitude
 
-                utility.getClosestGate(currLatitude, currLongitude)
-
-                var roadName = ""
-                if (numPings >= 2) {
-                    roadName = getRoadName(currLatitude, currLongitude, applicationContext)
-                }
-                if (numPings >= 3) {
-                    updateBearing()
-                }
-
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
                 if (isAtGate(closestGate) && timeoutExpired() && numPings >= 2) {
-                    // incur toll
-
-                    val tollIncurred = Toll(closestGate.id, Timestamp(System.currentTimeMillis()))
-                    val userId: String = auth.currentUser!!.uid
-                    userTolls.add(tollIncurred)
-
-                    todayTotalCost += closestGate.cost
-
-                    val intent = Intent("com.shinetech.tollview.ACTION_GATE_TEXT")
-                    intent.putExtra(LocationServiceBroadcast.KEY_GATE_TEXT, "$${closestGate.cost} at ${closestGate.name}")
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-
-                    val updatedNotification = notification.setContentText(
-                        "at ${closestGate.name}"
-                    )
-                    notification.setContentTitle("$${closestGate.cost}")
-                    notificationManager.notify(1, updatedNotification.build())
-
-                    utility.getTollsForUser { tolls ->
-                        tolls.add(tollIncurred)
-                        usersReference.child(userId).child("tolls").setValue(tolls).addOnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                utility.toast("Error Adding Toll to Database")
-                            }
-                        }
-                    }
+                    incurToll(closestGate, notification, notificationManager)
                 }
 
                 val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE")
@@ -177,6 +143,40 @@ class LocationService: Service() {
             .launchIn(serviceScope)
 
         startForeground(1, notification.build())
+    }
+
+    private fun incurToll(
+        closestGate: Gate,
+        notification: NotificationCompat.Builder,
+        notificationManager: NotificationManager
+    ) {
+        val tollIncurred = Toll(closestGate.id, Timestamp(System.currentTimeMillis()))
+        val userId: String = auth.currentUser!!.uid
+        userTolls.add(tollIncurred)
+        todayTotalCost += closestGate.cost
+
+        val intent = Intent("com.shinetech.tollview.ACTION_GATE_TEXT")
+        intent.putExtra(
+            LocationServiceBroadcast.KEY_GATE_TEXT,
+            "$${closestGate.cost} at ${closestGate.name}"
+        )
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
+        val updatedNotification = notification.setContentText(
+            "at ${closestGate.name}"
+        )
+        notification.setContentTitle("$${closestGate.cost}")
+        notificationManager.notify(1, updatedNotification.build())
+
+        utility.getTollsForUser { tolls ->
+            tolls.add(tollIncurred)
+            usersReference.child(userId).child("tolls").setValue(tolls)
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        utility.toast("Error Adding Toll to Database")
+                    }
+                }
+        }
     }
 
     private fun distanceBetweenPoints(otherLat: Double, otherLong: Double): Double {
