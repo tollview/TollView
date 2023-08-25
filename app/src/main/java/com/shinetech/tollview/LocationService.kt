@@ -40,7 +40,7 @@ import kotlin.math.pow
 
 class LocationService: Service() {
     private var MINIMUM_TOLL_REENTRY_TIME: Double = 0.5
-    private var DISTANCE_TUNING_PARAMETER: Double = 0.015
+    private var DISTANCE_TUNING_PARAMETER: Double = 0.008
     private var PING_SPEED: Long = 1_300L
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -67,7 +67,6 @@ class LocationService: Service() {
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            println("UPDATING VALUES!")
 
             val distToToll = intent.getDoubleExtra("distToToll", 0.25)
             DISTANCE_TUNING_PARAMETER = distToToll
@@ -110,9 +109,9 @@ class LocationService: Service() {
     private fun start() {
         val notification = NotificationCompat.Builder(this,"location")
             .setContentTitle("Welcome to TollView")
-            .setContentText("Starting up...")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-//            .setOngoing(false)
+            .setContentText("Viewing Tolls...")
+            .setSmallIcon(com.google.android.material.R.drawable.design_password_eye)
+            .setOngoing(false)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -124,19 +123,7 @@ class LocationService: Service() {
             .getLocationUpdates(PING_SPEED)
             .catch { e -> e.printStackTrace()}
             .onEach { location ->
-
-
-                println("====> DISTANCE_TUNING_PARAMETER: $DISTANCE_TUNING_PARAMETER")
-                println("====> MINIMUM_TOLL_REENTRY_TIME: $MINIMUM_TOLL_REENTRY_TIME")
-                println("====> PING_SPEED: $PING_SPEED")
-
                 numPings += 1
-
-                println("------------------------------")
-                println("NEW PING: $numPings")
-                println("------------------------------")
-                println("todayTotal = ${todayTotalCost.toString()}")
-
                 currLatitude = location.latitude
                 currLongitude = location.longitude
 
@@ -145,22 +132,12 @@ class LocationService: Service() {
                 var roadName = ""
                 if (numPings >= 2) {
                     roadName = getRoadName(currLatitude, currLongitude, applicationContext)
-                    println("Speed: ${location.speed}")
                 }
                 if (numPings >= 3) {
                     updateBearing()
-                    println("Bearing: $bearing")
-
                 }
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
-
-
-                println("isAtGate: ${isAtGate(closestGate)}")
-
-
-                println("isAtGate(): ${isAtGate(closestGate)}")
-                println("timeoutExpired(): ${timeoutExpired()}")
 
                 if (isAtGate(closestGate) && timeoutExpired() && numPings >= 2) {
                     // incur toll
@@ -169,9 +146,7 @@ class LocationService: Service() {
                     val userId: String = auth.currentUser!!.uid
                     userTolls.add(tollIncurred)
 
-                    println("YOU GOT A TOLL")
                     todayTotalCost += closestGate.cost
-                    println("$todayTotalCost")
 
                     val intent = Intent("com.shinetech.tollview.ACTION_GATE_TEXT")
                     intent.putExtra(LocationServiceBroadcast.KEY_GATE_TEXT, "$${closestGate.cost} at ${closestGate.name}")
@@ -192,13 +167,6 @@ class LocationService: Service() {
                         }
                     }
                 }
-
-
-                println("Closest Gate: ${closestGate.name}")
-
-                println("userToll Size: ${userTolls.size}")
-
-                println("-------->> $prevLatitude , $currLatitude <<--------")
 
                 val intent = Intent("com.shinetech.tollview.DEBUG_UPDATE")
                 intent.putExtra("currentLocation", "$currLatitude , $currLongitude")
@@ -289,9 +257,6 @@ class LocationService: Service() {
     private fun calculateBearing(startLatitude: Double, startLongitude: Double, endLatitude: Double, endLongitude: Double): Float {
 
         val deltaLongitude = endLongitude - startLongitude
-
-
-        println("Delta Long: $deltaLongitude")
 
         val y = sin(toRadians(deltaLongitude)) * cos(toRadians(endLatitude))
         val x = cos(toRadians(startLatitude)) * sin(toRadians(endLatitude)) -

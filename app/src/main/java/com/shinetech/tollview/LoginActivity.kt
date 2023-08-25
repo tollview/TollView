@@ -52,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
                 logInWithFirebase(email, password)
             }else{
                 utility.toast("There was an error")
-                println("${task.exception?.localizedMessage}")
             }
         }
 

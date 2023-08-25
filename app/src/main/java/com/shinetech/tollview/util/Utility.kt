@@ -43,7 +43,6 @@ class Utility(private val applicationContext: Context) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
         })
@@ -75,8 +74,6 @@ class Utility(private val applicationContext: Context) {
 
     fun getTollsForUser(callback: (ArrayList<Toll>) -> Unit) {
         val tollsList: ArrayList<Toll> = ArrayList()
-
-        println(auth.currentUser!!.uid)
 
         val tollsReference = usersReference.child(auth.currentUser!!.uid).child("tolls")
 
@@ -113,7 +110,6 @@ class Utility(private val applicationContext: Context) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
         })
     }
