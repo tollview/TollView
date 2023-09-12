@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -116,7 +117,12 @@ class LocationService: Service() {
 
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
-        registerReceiver(receiver, filter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Check for Android 12 and above
+            registerReceiver(receiver, filter, null, null, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(receiver, filter)
+        }
+
 
         locationClient
             .getLocationUpdates(PING_SPEED)
@@ -127,6 +133,10 @@ class LocationService: Service() {
                 currLongitude = location.longitude
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
+
+                println("Closest Gate Name: ${closestGate.name}")
+                println("Current Distance: ${distanceBetweenPoints(closestGate.latitude, closestGate.longitude)}")
+                println("Location: ${location.latitude}, ${location.longitude}")
 
                 if (isAtGate(closestGate) && timeoutExpired() && numPings >= 2) {
                     incurToll(closestGate, notification, notificationManager)
