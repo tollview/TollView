@@ -1,13 +1,12 @@
 package com.shinetech.tollview
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.location.Address
-import android.location.Geocoder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -27,17 +26,11 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.lang.Exception
 import java.lang.Math.PI
-import java.lang.Math.atan2
-import java.lang.Math.cos
-import java.lang.Math.sqrt
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
 import java.sql.Timestamp
-import java.util.Locale
 import kotlin.math.pow
-import java.lang.Math.sin
 
 class LocationService: Service() {
     private var MINIMUM_TOLL_REENTRY_TIME: Double = 0.5
@@ -57,7 +50,7 @@ class LocationService: Service() {
 
     private var bearing: Double = 0.0
 
-    private var userTolls: ArrayList<Toll> = ArrayList<Toll>()
+    private var userTolls: ArrayList<Toll> = ArrayList()
 
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val usersReference: DatabaseReference = database.reference.child("users")
@@ -105,6 +98,7 @@ class LocationService: Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    @SuppressLint("PrivateResource")
     private fun start() {
         val notification = NotificationCompat.Builder(this,"location")
             .setContentTitle("Welcome to TollView")
@@ -199,8 +193,10 @@ class LocationService: Service() {
         val distLat = lat2 - lat1
         val distLong = lon2 - long1
 
-        val a = sin(distLat / 2).pow(2) + cos(lat1) * cos(lat2) * sin(distLong / 2).pow(2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        val a = kotlin.math.sin(distLat / 2).pow(2) + kotlin.math.cos(lat1) * kotlin.math.cos(lat2) * kotlin.math.sin(
+            distLong / 2
+        ).pow(2)
+        val c = 2 * kotlin.math.atan2(kotlin.math.sqrt(a), kotlin.math.sqrt(1 - a))
 
         return earthRadius * c
     }
@@ -209,15 +205,13 @@ class LocationService: Service() {
 
         if (!userTolls.isNullOrEmpty()) {
             val latestTollTimestamp = userTolls[userTolls.lastIndex].timestamp
-            val currentTimestamp: Timestamp = Timestamp(System.currentTimeMillis())
-
+            val currentTimestamp = Timestamp(System.currentTimeMillis())
 
             latestTollTimestamp?.let {
                 val timeDelta: Double = (currentTimestamp.time - latestTollTimestamp.time)/60_000.0
                 return timeDelta >= MINIMUM_TOLL_REENTRY_TIME
             }
         }
-
         return false
     }
 
@@ -225,26 +219,6 @@ class LocationService: Service() {
         val distance = distanceBetweenPoints(closestGate.latitude, closestGate.longitude)
         return distance <= DISTANCE_TUNING_PARAMETER
     }
-
-    private fun getRoadName(latitude: Double, longitude: Double, context: Context): String {
-
-        val geocoder = Geocoder(context, Locale.getDefault())
-        val addresses: List<Address>?
-
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return "Error in Geocoding"
-        }
-
-        if (!addresses.isNullOrEmpty()) {
-            val address = addresses[0]
-            return address.thoroughfare ?: "Unknown Road"
-        }
-        return "Addresses was null or empty"
-    }
-
 
     private fun updateBearing() {
 
@@ -256,16 +230,17 @@ class LocationService: Service() {
         }
     }
 
-    private fun calculateBearing(startLatitude: Double, startLongitude: Double, endLatitude: Double, endLongitude: Double): Float {
+    private fun calculateBearing(
+        startLatitude: Double, startLongitude: Double,
+        endLatitude: Double, endLongitude: Double): Float {
 
         val deltaLongitude = endLongitude - startLongitude
 
-        val y = sin(toRadians(deltaLongitude)) * cos(toRadians(endLatitude))
-        val x = cos(toRadians(startLatitude)) * sin(toRadians(endLatitude)) -
-                sin(toRadians(startLatitude)) * cos(toRadians(endLatitude)) *
-                cos(toRadians(deltaLongitude))
-
-        val bearing = toDegrees(atan2(y, x)).toFloat()
+        val y = kotlin.math.sin(toRadians(deltaLongitude)) * kotlin.math.cos(toRadians(endLatitude))
+        val x = kotlin.math.cos(toRadians(startLatitude)) * kotlin.math.sin(toRadians(endLatitude)) -
+                kotlin.math.sin(toRadians(startLatitude)) * kotlin.math.cos(toRadians(endLatitude)) *
+                kotlin.math.cos(toRadians(deltaLongitude))
+        val bearing = toDegrees(kotlin.math.atan2(y, x)).toFloat()
         return (bearing + 360) % 360
     }
 
@@ -273,7 +248,6 @@ class LocationService: Service() {
     private fun stop() {
         stopForeground(true)
         stopSelf()
-
     }
 
     override fun onDestroy() {
