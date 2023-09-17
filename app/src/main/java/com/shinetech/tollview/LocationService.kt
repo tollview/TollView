@@ -126,9 +126,6 @@ class LocationService: Service() {
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
-//                println("Closest Gate Name: ${closestGate.name}")
-//                println("Current Distance: ${distanceBetweenPoints(closestGate.latitude, closestGate.longitude)}")
-                println("Location: ${location.latitude}, ${location.longitude}")
                 updateBearing()
                 binBearing8()
 
@@ -248,7 +245,6 @@ class LocationService: Service() {
         val intercardinals = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")
         val index = ((bearing + 22.5) % 360 / 45).toInt()
         val bin8Bearing = intercardinals[index]
-        println("bearing: $bearing; 8bin: $bin8Bearing")
         return bin8Bearing
     }
 
