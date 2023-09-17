@@ -104,8 +104,6 @@ class LocationService: Service() {
             .setContentTitle("Welcome to TollView")
             .setContentText("Viewing Tolls...")
             .setSmallIcon(com.google.android.material.R.drawable.design_password_eye)
-//            .setOngoing(true)
-        // TODO: break this notification off into two. Tracking checker is its own ongoing; tolls are viewed on another.
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -128,9 +126,11 @@ class LocationService: Service() {
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
-                println("Closest Gate Name: ${closestGate.name}")
-                println("Current Distance: ${distanceBetweenPoints(closestGate.latitude, closestGate.longitude)}")
+//                println("Closest Gate Name: ${closestGate.name}")
+//                println("Current Distance: ${distanceBetweenPoints(closestGate.latitude, closestGate.longitude)}")
                 println("Location: ${location.latitude}, ${location.longitude}")
+                updateBearing()
+                binBearing8()
 
                 if (isAtGate(closestGate) && timeoutExpired() && numPings >= 2) {
                     incurToll(closestGate, notification, notificationManager)
@@ -242,6 +242,14 @@ class LocationService: Service() {
                 kotlin.math.cos(toRadians(deltaLongitude))
         val bearing = toDegrees(kotlin.math.atan2(y, x)).toFloat()
         return (bearing + 360) % 360
+    }
+
+    private fun binBearing8(): String {
+        val intercardinals = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")
+        val index = ((bearing + 22.5) % 360 / 45).toInt()
+        val bin8Bearing = intercardinals[index]
+        println("bearing: $bearing; 8bin: $bin8Bearing")
+        return bin8Bearing
     }
 
 
