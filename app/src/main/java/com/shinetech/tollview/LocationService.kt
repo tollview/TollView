@@ -237,6 +237,7 @@ class LocationService: Service() {
         val x = kotlin.math.cos(toRadians(startLatitude)) * kotlin.math.sin(toRadians(endLatitude)) -
                 kotlin.math.sin(toRadians(startLatitude)) * kotlin.math.cos(toRadians(endLatitude)) *
                 kotlin.math.cos(toRadians(deltaLongitude))
+
         val bearing = toDegrees(kotlin.math.atan2(y, x)).toFloat()
         return (bearing + 360) % 360
     }
@@ -244,10 +245,8 @@ class LocationService: Service() {
     private fun binBearing8(): String {
         val intercardinals = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")
         val index = ((bearing + 22.5) % 360 / 45).toInt()
-        val bin8Bearing = intercardinals[index]
-        return bin8Bearing
+        return intercardinals[index]
     }
-
 
     private fun stop() {
         stopForeground(true)
