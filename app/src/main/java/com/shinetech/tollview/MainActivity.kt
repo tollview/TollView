@@ -1,26 +1,27 @@
 package com.shinetech.tollview
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Button
-import androidx.core.app.ActivityCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.shinetech.tollview.util.Utility
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
+import android.os.Bundle
+import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.firebase.auth.FirebaseAuth
+import com.shinetech.tollview.util.Utility
 
 @SuppressLint("SetTextI18n")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var utility: Utility
     private lateinit var btnSignOut: Button
+    private lateinit var btnViewTolls: Button
     private lateinit var btnUpdateValues: Button
     private lateinit var sbDistToToll: SeekBar
     private lateinit var sbReentryTime: SeekBar
@@ -124,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         sbReentryTime = findViewById(R.id.sbReentryTime)
         sbPingSpeed = findViewById(R.id.sbPingSpeed)
         btnSignOut = findViewById(R.id.btnSignOut)
+        btnViewTolls = findViewById(R.id.btnViewTolls)
         btnUpdateValues = findViewById(R.id.btnUpdateValues)
         tvTodayTotalCost = findViewById(R.id.tvTodayTotalCost)
         tvDistToTollValue = findViewById(R.id.tvDistToTollValue)
@@ -150,6 +152,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        btnViewTolls.setOnClickListener {
+            val intent = Intent(this@MainActivity, ViewActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
     override fun onResume() {
         super.onResume()
@@ -168,7 +176,12 @@ class MainActivity : AppCompatActivity() {
             action = LocationService.ACTION_STOP
             startService(this)
         }
+        try {
+            unregisterReceiver(receiver)
+        } catch (e: IllegalArgumentException) {
+            println("there's an error")
+        }
+
         super.onDestroy()
-        unregisterReceiver(receiver)
     }
 }
