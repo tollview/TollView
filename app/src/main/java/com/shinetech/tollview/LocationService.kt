@@ -33,40 +33,30 @@ import java.sql.Timestamp
 import kotlin.math.pow
 
 class LocationService: Service() {
-    private var MINIMUM_TOLL_REENTRY_TIME: Double = 0.5
-    private var DISTANCE_TUNING_PARAMETER: Double = 0.008
+    private var REENTRY_TIME: Double = 0.5
+    private var DISTANCE_TO_TOLL: Double = 0.008
     private var PING_SPEED: Long = 1_300L
-
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var utility: Utility
     private lateinit var locationClient: LocationClient
-
     private var numPings: Int = 0
-
     private var prevLongitude: Double = 0.0
     private var prevLatitude: Double = 0.0
     private var currLongitude: Double = 0.0
     private var currLatitude: Double = 0.0
-
     private var bearing: Double = 0.0
-
+    private var todayTotalCost: Double = 0.0
     private var userTolls: ArrayList<Toll> = ArrayList()
-
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val usersReference: DatabaseReference = database.reference.child("users")
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-
-
-    private var todayTotalCost: Double = 0.0
-
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-
             val distToToll = intent.getDoubleExtra("distToToll", 0.25)
-            DISTANCE_TUNING_PARAMETER = distToToll
+            DISTANCE_TO_TOLL = distToToll
 
             val reentryTime = intent.getDoubleExtra("reentryTime", 1.0)
-            MINIMUM_TOLL_REENTRY_TIME = reentryTime
+            REENTRY_TIME = reentryTime
 
             val pingSpeed: Long = intent.getLongExtra("pingSpeed", 2000)
             PING_SPEED = pingSpeed
@@ -104,8 +94,6 @@ class LocationService: Service() {
             .setContentTitle("Welcome to TollView")
             .setContentText("Viewing Tolls...")
             .setSmallIcon(com.google.android.material.R.drawable.design_password_eye)
-//            .setOngoing(true)
-        // TODO: break this notification off into two. Tracking checker is its own ongoing; tolls are viewed on another.
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -128,11 +116,7 @@ class LocationService: Service() {
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
-                println("Closest Gate Name: ${closestGate.name}")
-                println("Current Distance: ${distanceBetweenPoints(closestGate.latitude, closestGate.longitude)}")
-                println("Location: ${location.latitude}, ${location.longitude}")
-
-                if (isAtGate(closestGate) && timeoutExpired() && numPings >= 2) {
+                if (isAtGate(closestGate) && timeoutExpired()) {
                     incurToll(closestGate, notification, notificationManager)
                 }
 
@@ -159,6 +143,16 @@ class LocationService: Service() {
         userTolls.add(tollIncurred)
         todayTotalCost += closestGate.cost
 
+        updateTodayCost(closestGate, notification, notificationManager)
+
+        updateTollsInDatabase(tollIncurred, userId)
+    }
+
+    private fun updateTodayCost(
+        closestGate: Gate,
+        notification: NotificationCompat.Builder,
+        notificationManager: NotificationManager
+    ) {
         val intent = Intent("com.shinetech.tollview.ACTION_GATE_TEXT")
         intent.putExtra(
             LocationServiceBroadcast.KEY_GATE_TEXT,
@@ -171,7 +165,9 @@ class LocationService: Service() {
         )
         notification.setContentTitle("$${closestGate.cost}")
         notificationManager.notify(1, updatedNotification.build())
+    }
 
+    private fun updateTollsInDatabase(tollIncurred: Toll, userId: String) {
         utility.getTollsForUser { tolls ->
             tolls.add(tollIncurred)
             usersReference.child(userId).child("tolls").setValue(tolls)
@@ -209,7 +205,7 @@ class LocationService: Service() {
 
             latestTollTimestamp?.let {
                 val timeDelta: Double = (currentTimestamp.time - latestTollTimestamp.time)/60_000.0
-                return timeDelta >= MINIMUM_TOLL_REENTRY_TIME
+                return timeDelta >= REENTRY_TIME
             }
         }
         return false
@@ -217,7 +213,7 @@ class LocationService: Service() {
 
     private fun isAtGate(closestGate: Gate): Boolean {
         val distance = distanceBetweenPoints(closestGate.latitude, closestGate.longitude)
-        return distance <= DISTANCE_TUNING_PARAMETER
+        return distance <= DISTANCE_TO_TOLL
     }
 
     private fun updateBearing() {
