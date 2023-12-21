@@ -58,8 +58,6 @@ class Utility(private val applicationContext: Context) {
 
             val otherLat = other.latitude
             val otherLong = other.longitude
-
-            // Compute distance
             val currentDist = currentGPS.distanceToOtherPoint(Point(otherLat, otherLong))
 
             if (currentDist < leastDist) {
