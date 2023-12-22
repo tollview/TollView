@@ -61,6 +61,7 @@ class LocationService: Service() {
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
         utility= Utility(applicationContext)
+        utility.toast("oh no LocServ ran from bin")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

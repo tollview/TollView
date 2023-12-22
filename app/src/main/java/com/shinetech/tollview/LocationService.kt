@@ -95,7 +95,9 @@ class LocationService: Service() {
             .setContentText("Viewing Tolls...")
             .setSmallIcon(com.google.android.material.R.drawable.design_password_eye)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(1, notification.build())
 
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
@@ -116,7 +118,9 @@ class LocationService: Service() {
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
+                println("butts")
                 if (isAtGate(closestGate) && timeoutExpired()) {
+                    println("booty")
                     incurToll(closestGate, notification, notificationManager)
                 }
 
@@ -129,7 +133,6 @@ class LocationService: Service() {
                 prevLongitude = currLongitude
             }
             .launchIn(serviceScope)
-
         startForeground(1, notification.build())
     }
 
