@@ -106,6 +106,10 @@ class LocationService: Service() {
         } else {
             registerReceiver(receiver, filter)
         }
+        var userExists :Boolean = false
+        utility.getTollsForUser {
+            userExists = it.isNotEmpty()
+        }
 
 
         locationClient
@@ -118,9 +122,7 @@ class LocationService: Service() {
 
                 val closestGate = utility.getClosestGate(currLatitude, currLongitude)
 
-                println("butts")
-                if (isAtGate(closestGate) && timeoutExpired()) {
-                    println("booty")
+                if (isAtGate(closestGate) && ( !userExists || timeoutExpired())) {
                     incurToll(closestGate, notification, notificationManager)
                 }
 
@@ -253,7 +255,7 @@ class LocationService: Service() {
         utility.getTollsForUser { tolls ->
             val userId: String = auth.currentUser!!.uid
             val tollsToPush: ArrayList<Toll> = tolls
-            tollsToPush.addAll(userTolls)
+//            tollsToPush.addAll(userTolls)
             usersReference.child(userId).child("tolls").setValue(tollsToPush).addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     utility.toast("Error Synchronizing Tolls")
