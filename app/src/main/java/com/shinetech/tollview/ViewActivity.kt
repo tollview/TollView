@@ -22,6 +22,7 @@ class ViewActivity : AppCompatActivity() {
         val emptyTollsList: ArrayList<Toll> = ArrayList()
         val userId = auth.currentUser!!.uid
         println("attempting to wipe records of $userId")
+
         usersReference.child(userId).child("tolls").setValue(emptyTollsList)
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful){
@@ -29,5 +30,7 @@ class ViewActivity : AppCompatActivity() {
                 }
             }
         println("allegedly wiped records of $userId")
+
+        usersReference.child(userId).child("tolls").removeValue()
     }
 }
