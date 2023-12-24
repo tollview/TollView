@@ -1,6 +1,9 @@
 package com.shinetech.tollview
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.util.Utility
@@ -10,11 +13,15 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 class ViewActivity : AppCompatActivity() {
+    lateinit var tvViewTerminal: TextView
+    lateinit var btnViewtoHome: Button
     private lateinit var utility: Utility
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
+        setupViewsById()
+        setupButtons()
         utility = Utility(applicationContext)
         utility.getTollsForUser { tolls: ArrayList<Toll> ->
             val startDate = LocalDate.of(2020, 1, 1)
@@ -34,6 +41,18 @@ class ViewActivity : AppCompatActivity() {
             // Use tollsBetweenDates as needed
             println("tolls between dates: $tollsBetweenDates")
             println("number of tolls between dates: ${tollsBetweenDates.size}")
+        }
+    }
+
+    private fun setupViewsById() {
+        tvViewTerminal = findViewById(R.id.tvViewTerminal)
+        btnViewtoHome = findViewById(R.id.btnViewToHome)
+    }
+    private fun setupButtons() {
+        btnViewtoHome.setOnClickListener {
+            val intent = Intent(this@ViewActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
