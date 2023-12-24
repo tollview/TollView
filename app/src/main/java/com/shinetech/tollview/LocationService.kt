@@ -222,7 +222,6 @@ class LocationService: Service() {
     }
 
     private fun updateBearing() {
-
         val validLat = prevLatitude != 0.0 && currLatitude != 0.0
         val validLong = prevLongitude != 0.0 && currLongitude != 0.0
 

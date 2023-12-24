@@ -7,6 +7,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.shinetech.tollview.models.Toll
 import com.shinetech.tollview.util.Utility
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+
 
 class ViewActivity : AppCompatActivity() {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -18,16 +25,26 @@ class ViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
         utility = Utility(applicationContext)
+        utility.getTollsForUser { tolls: ArrayList<Toll> ->
+            val startDate = LocalDate.of(2020, 1, 1)
+            val endDate = LocalDate.of(2024, 1, 31)
 
-        val emptyTollsList: ArrayList<Toll> = ArrayList()
-        val userId = auth.currentUser!!.uid
+            val tollsBetweenDates = tolls.filter { toll ->
+                val tollTimestamp = toll.timestamp?.let {
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.systemDefault())
+                }
 
-//        usersReference.child(userId).child("tolls").setValue(emptyTollsList)
-//            .addOnCompleteListener { task ->
-//                if (!task.isSuccessful){
-//                    utility.toast("Error deleting all the everything")
-//                }
-//            }
-//        usersReference.child(userId).child("tolls").removeValue()
+                tollTimestamp?.let {
+                    val tollDate = it.toLocalDate()
+                    tollDate.isAfter(startDate) && tollDate.isBefore(endDate.plusDays(1))
+                } ?: false // Handle cases where timestamp is null
+            }
+            println("tolls between dates: $tollsBetweenDates")
+            println("number of tolls between dates: ${tollsBetweenDates.size}")
+
+            // Use tollsBetweenDates as needed
+        }
     }
+
+
 }

@@ -112,6 +112,20 @@ class Utility(private val applicationContext: Context) {
         })
     }
 
+  fun clearAllTollsforUserInDB() {
+
+        val emptyTollsList: ArrayList<Toll> = ArrayList()
+        val userId = auth.currentUser!!.uid
+
+        usersReference.child(userId).child("tolls").setValue(emptyTollsList)
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    toast("Error deleting all the everything")
+                }
+            }
+        usersReference.child(userId).child("tolls").removeValue()
+    }
+
     fun toast(s: String) {
         Toast.makeText(
             applicationContext,
