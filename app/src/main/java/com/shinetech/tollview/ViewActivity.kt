@@ -24,23 +24,22 @@ class ViewActivity : AppCompatActivity() {
         setupButtons()
         utility = Utility(applicationContext)
         utility.getTollsForUser { tolls: ArrayList<Toll> ->
-            val startDate = LocalDate.of(2020, 1, 1)
-            val endDate = LocalDate.of(2024, 1, 31)
+            val endDate = LocalDate.now()
+            val startDate = endDate.minusDays(90)
 
-            val tollsBetweenDates = tolls.filter { toll ->
-                val tollTimestamp = toll.timestamp?.let {
-                    LocalDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.systemDefault())
+            val tollsByDate = tolls.groupBy { toll ->
+                toll.timestamp?.let {
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.systemDefault()).toLocalDate()
                 }
-
-                tollTimestamp?.let {
-                    val tollDate = it.toLocalDate()
-                    tollDate.isAfter(startDate) && tollDate.isBefore(endDate.plusDays(1))
-                } ?: false // Handle cases where timestamp is null
             }
 
-            // Use tollsBetweenDates as needed
-            println("tolls between dates: $tollsBetweenDates")
-            println("number of tolls between dates: ${tollsBetweenDates.size}")
+            for ((date, tollsForDay) in tollsByDate) {
+                date?.let {
+                    if (it.isAfter(startDate) && it.isBefore(endDate.plusDays(1))) {
+                        tvViewTerminal.append("\n\nDate: $it, Tolls: $tollsForDay")
+                    }
+                }
+            }
         }
     }
 
