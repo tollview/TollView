@@ -26,7 +26,7 @@ class Utility(private val applicationContext: Context) {
     }
 
 
-    private fun fetchGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
+    fun fetchGatesFromDatabase(callback: (ArrayList<Gate>) -> Unit) {
         val gatesList: ArrayList<Gate> = ArrayList()
 
         gatesReference.addListenerForSingleValueEvent(object: ValueEventListener {
