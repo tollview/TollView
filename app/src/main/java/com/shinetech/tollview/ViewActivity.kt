@@ -12,11 +12,13 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class ViewActivity : AppCompatActivity() {
     private lateinit var tvViewTerminal: TextView
     private lateinit var btnViewtoHome: Button
     private lateinit var utility: Utility
+    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyMMdd")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +27,13 @@ class ViewActivity : AppCompatActivity() {
         setupButtons()
         utility = Utility(applicationContext)
 
-        var gatesList = ArrayList<Gate>()
+        var gatesMap = emptyMap<String, Gate>()
+        var gatesList = emptyList<Gate>()
         utility.fetchGatesFromDatabase {
             gatesList = it
+            gatesMap = gatesList.associateBy { it.id }
         }
 
-        val gatesMap = gatesList.associateBy { it.id }
 
         utility.getTollsForUser { tolls: ArrayList<Toll> ->
             val endDate = LocalDate.now()
@@ -45,10 +48,13 @@ class ViewActivity : AppCompatActivity() {
             for ((date, tollsForDay) in tollsByDate) {
                 date?.let {
                     if (it.isAfter(startDate) && it.isBefore(endDate.plusDays(1))) {
+                        println("gatesList size = ${gatesList.size}")
                         val totalCostForDay = tollsForDay.sumOf { toll ->
                             gatesMap[toll.gateId]?.cost ?: 0.0
                         }
-                        tvViewTerminal.append("\n\nDate: $it, Total Cost: $totalCostForDay")
+                        val formattedDate = it.format(dateFormatter)
+                        val formattedTotalCost = String.format("%.2f", totalCostForDay)
+                        tvViewTerminal.append("\n\n$formattedDate, $$formattedTotalCost")
                     }
                 }
             }

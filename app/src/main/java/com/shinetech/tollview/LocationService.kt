@@ -102,7 +102,8 @@ class LocationService: Service() {
         val filter = IntentFilter()
         filter.addAction("com.shinetech.tollview.DEBUG_UPDATE_SLIDERS")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Check for Android 12 and above
-            registerReceiver(receiver, filter, null, null, Context.RECEIVER_NOT_EXPORTED)
+            registerReceiver(receiver, filter,
+                null, null, Context.RECEIVER_NOT_EXPORTED)
         } else {
             registerReceiver(receiver, filter)
         }
@@ -182,7 +183,7 @@ class LocationService: Service() {
                     }
                 }
         }
-    }
+    }       
 
     private fun distanceBetweenPoints(otherLat: Double, otherLong: Double): Double {
         val earthRadius = 3958.8 // in mi
@@ -194,9 +195,9 @@ class LocationService: Service() {
         val distLat = lat2 - lat1
         val distLong = lon2 - long1
 
-        val a = kotlin.math.sin(distLat / 2).pow(2) + kotlin.math.cos(lat1) * kotlin.math.cos(lat2) * kotlin.math.sin(
-            distLong / 2
-        ).pow(2)
+        val a = kotlin.math.sin(distLat / 2).pow(2) +
+                kotlin.math.cos(lat1) * kotlin.math.cos(lat2) *
+                kotlin.math.sin(distLong / 2).pow(2)
         val c = 2 * kotlin.math.atan2(kotlin.math.sqrt(a), kotlin.math.sqrt(1 - a))
 
         return earthRadius * c
@@ -209,7 +210,9 @@ class LocationService: Service() {
             val currentTimestamp = Timestamp(System.currentTimeMillis())
 
             latestTollTimestamp?.let {
-                val timeDelta: Double = (currentTimestamp.time - latestTollTimestamp.time)/60_000.0
+                val timeDelta: Double = (
+                        currentTimestamp.time - latestTollTimestamp.time
+                        )/60_000.0
                 return timeDelta >= REENTRY_TIME
             }
         }
@@ -226,7 +229,8 @@ class LocationService: Service() {
         val validLong = prevLongitude != 0.0 && currLongitude != 0.0
 
         if (validLat && validLong) {
-            bearing = calculateBearing(prevLatitude, prevLongitude, currLatitude, currLongitude).toDouble()
+            bearing = calculateBearing(prevLatitude, prevLongitude, currLatitude, currLongitude)
+                .toDouble()
         }
     }
 
@@ -236,9 +240,12 @@ class LocationService: Service() {
 
         val deltaLongitude = endLongitude - startLongitude
 
-        val y = kotlin.math.sin(toRadians(deltaLongitude)) * kotlin.math.cos(toRadians(endLatitude))
-        val x = kotlin.math.cos(toRadians(startLatitude)) * kotlin.math.sin(toRadians(endLatitude)) -
-                kotlin.math.sin(toRadians(startLatitude)) * kotlin.math.cos(toRadians(endLatitude)) *
+        val y = kotlin.math.sin(toRadians(deltaLongitude)) *
+                kotlin.math.cos(toRadians(endLatitude))
+        val x = kotlin.math.cos(toRadians(startLatitude)) *
+                kotlin.math.sin(toRadians(endLatitude)) -
+                kotlin.math.sin(toRadians(startLatitude)) *
+                kotlin.math.cos(toRadians(endLatitude)) *
                 kotlin.math.cos(toRadians(deltaLongitude))
         val bearing = toDegrees(kotlin.math.atan2(y, x)).toFloat()
         return (bearing + 360) % 360
@@ -254,8 +261,9 @@ class LocationService: Service() {
         utility.getTollsForUser { tolls ->
             val userId: String = auth.currentUser!!.uid
             val tollsToPush: ArrayList<Toll> = tolls
-//            tollsToPush.addAll(userTolls)
-            usersReference.child(userId).child("tolls").setValue(tollsToPush).addOnCompleteListener { task ->
+            usersReference.child(userId).child("tolls")
+                .setValue(tollsToPush)
+                .addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     utility.toast("Error Synchronizing Tolls")
                 }
