@@ -87,8 +87,13 @@ class Utility(private val applicationContext: Context) {
 
                 for (tollSnapshot in dataSnapshot.children) {
 
-                    val gateId = tollSnapshot.child("gateId").getValue(String::class.java) ?: ""
-                    val timestampMap = tollSnapshot.child("timestamp").value as? Map<String, Any?>
+                    val gateId = tollSnapshot
+                        .child("gateId")
+                        .getValue(String::class.java) ?: ""
+
+                    val timestampMap = tollSnapshot
+                        .child("timestamp")
+                        .value as? Map<String, Any?>
 
                     timestampMap.let {
                         val timeLong = timestampMap?.get("time") as? Long
