@@ -41,7 +41,8 @@ class ViewActivity : AppCompatActivity() {
 
             val tollsByDate = tolls.groupBy { toll ->
                 toll.timestamp?.let {
-                    LocalDateTime.ofInstant(Instant.ofEpochMilli(it.time), ZoneId.systemDefault()).toLocalDate()
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(it.time),
+                        ZoneId.systemDefault()).toLocalDate()
                 }
             }
 

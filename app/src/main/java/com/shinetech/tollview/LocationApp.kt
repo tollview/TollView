@@ -15,7 +15,8 @@ class LocationApp: Application() {
                 "location",
                 NotificationManager.IMPORTANCE_HIGH
             )
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
+                    as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }

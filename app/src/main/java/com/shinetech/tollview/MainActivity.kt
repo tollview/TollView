@@ -37,7 +37,9 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent) {
             when (intent.action) {
                 "com.shinetech.tollview.ACTION_GATE_TEXT" -> {
-                    val latestToll = intent.getStringExtra(LocationService.LocationServiceBroadcast.KEY_GATE_TEXT)
+                    val latestToll = intent.getStringExtra(
+                        LocationService.LocationServiceBroadcast.KEY_GATE_TEXT
+                    )
                     tvTollTerminal.append("\n$latestToll")
                 }
                 "com.shinetech.tollview.DEBUG_UPDATE" -> {
