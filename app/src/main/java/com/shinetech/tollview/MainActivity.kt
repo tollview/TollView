@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
         try {
             unregisterReceiver(receiver)
         } catch (e: IllegalArgumentException) {
-            println("there's an error")
+            println("error in MainOnDestroy: $e")
         }
 
         super.onDestroy()

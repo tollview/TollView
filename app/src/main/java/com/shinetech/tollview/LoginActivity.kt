@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
             if(task.isSuccessful){
                 logInWithFirebase(email, password)
             }else{
-                utility.toast("There was an error")
+                utility.toast("Error in SignUpWithFirebase")
             }
         }
 

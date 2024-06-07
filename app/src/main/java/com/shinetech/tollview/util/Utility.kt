@@ -34,7 +34,7 @@ class Utility(private val applicationContext: Context) {
                 gatesList.clear()
 
                 for (gateSnapshot in dataSnapshot.children) {
-                    val gate = gateSnapshot.getValue(Gate::class.java)
+                    val gate = gateSnapshot.getValue(Gate::class.java)?.let { checkCardinality(it) }
                     gate?.let {
                         gatesList.add(it)
                     }
@@ -46,6 +46,12 @@ class Utility(private val applicationContext: Context) {
             }
 
         })
+    }
+
+    private fun checkCardinality(gate: Gate): Gate {
+        val validCardinalities = listOf('N', 'S', 'E', 'W', '-')
+        val cardinality = gate.cardinality.takeIf { it in validCardinalities } ?: '-'
+        return gate.copy(cardinality = cardinality)
     }
 
     fun getClosestGate(lat: Double, long: Double): Gate {
@@ -110,20 +116,6 @@ class Utility(private val applicationContext: Context) {
             override fun onCancelled(error: DatabaseError) {
             }
         })
-    }
-
-  fun clearAllTollsforUserInDB() {
-
-        val emptyTollsList: ArrayList<Toll> = ArrayList()
-        val userId = auth.currentUser!!.uid
-
-        usersReference.child(userId).child("tolls").setValue(emptyTollsList)
-            .addOnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    toast("Error deleting all the everything")
-                }
-            }
-        usersReference.child(userId).child("tolls").removeValue()
     }
 
     fun toast(s: String) {
