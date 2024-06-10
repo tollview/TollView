@@ -1,5 +1,6 @@
-package com.shinetech.tollview.models
+package com.shinetech.tollview
 
+import com.shinetech.tollview.models.Gate
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -17,7 +18,7 @@ class GateTest {
             costWithoutTag = 3.00,
             latitude = 40.7128,
             longitude = -74.0060,
-            cardinality = 'N'
+            cardinality = "N"
         )
 
         assertEquals("1", gate.id)
@@ -29,7 +30,7 @@ class GateTest {
         assertEquals(3.00, gate.costWithoutTag, 0.01)
         assertEquals(40.7128, gate.latitude, 0.0001)
         assertEquals(-74.0060, gate.longitude, 0.0001)
-        assertEquals('N', gate.cardinality)
+        assertEquals("N", gate.cardinality)
     }
 
     @Test
