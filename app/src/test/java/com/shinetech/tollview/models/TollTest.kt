@@ -1,6 +1,5 @@
-package com.shinetech.tollview
+package com.shinetech.tollview.models
 
-import com.shinetech.tollview.models.Toll
 import org.junit.Assert.*
 import org.junit.Test
 import java.sql.Timestamp
