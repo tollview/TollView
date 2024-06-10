@@ -49,8 +49,8 @@ class Utility(private val applicationContext: Context) {
     }
 
     private fun checkCardinality(gate: Gate): Gate {
-        val validCardinalities = listOf('N', 'S', 'E', 'W', '-')
-        val cardinality = gate.cardinality.takeIf { it in validCardinalities } ?: '-'
+        val validCardinalities = listOf("N", "S", "E", "W", "-")
+        val cardinality = gate.cardinality.takeIf { it in validCardinalities } ?: "-"
         return gate.copy(cardinality = cardinality)
     }
 
