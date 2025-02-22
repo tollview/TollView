@@ -12,14 +12,14 @@ import androidx.compose.material3.Text
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 sealed class Screen(val route: String, val label: String, val icon: ImageVector) {
+    data object Profile : Screen("profile", "Profile", Icons.Filled.Person)
     data object Home : Screen("home", "Home", Icons.Filled.Home)
     data object History : Screen("history", "History", Icons.Filled.History)
-    data object Profile : Screen("profile", "Profile", Icons.Filled.Person)
 }
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    val screens = listOf(Screen.Home, Screen.History, Screen.Profile)
+    val screens = listOf(Screen.Profile, Screen.Home, Screen.History)
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     NavigationBar {
