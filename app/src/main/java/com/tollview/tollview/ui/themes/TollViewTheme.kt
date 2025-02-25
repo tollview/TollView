@@ -3,6 +3,8 @@ package com.tollview.tollview.ui
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun TollViewTheme(
@@ -11,10 +13,17 @@ fun TollViewTheme(
 ) {
     val colors = if (darkTheme) darkColorScheme() else lightColorScheme()
 
+    val systemUiController = rememberSystemUiController()
+    systemUiController.isNavigationBarVisible = false
+
+    systemUiController.setStatusBarColor(Color.Transparent)
+    systemUiController.setNavigationBarColor(Color.Transparent)
+
+
     MaterialTheme(
         colorScheme = colors,
-        typography = androidx.compose.material3.Typography(),
-        shapes = androidx.compose.material3.Shapes(),
+        typography = Typography(),
+        shapes = Shapes(),
         content = content
     )
 }
