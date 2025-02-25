@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "536066125827",
+    "firebase_url": "https://tollview-dfw-default-rtdb.firebaseio.com",
+    "project_id": "tollview-dfw",
+    "storage_bucket": "tollview-dfw.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536066125827:android:6557aef0fe86ac641f9e36",
+        "android_client_info": {
+          "package_name": "com.shinetech.tollview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536066125827-09mhullpr8rk95aq9fu18f9ghrp9frbt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shinetech.tollview",
+            "certificate_hash": "26bc95f783b709c8d3d8b80904b28b5bdc46fb04"
+          }
+        },
+        {
+          "client_id": "536066125827-9i0gir3akr8lr93sfha6ricvphrhdt20.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shinetech.tollview",
+            "certificate_hash": "2240931135ef7eb8b707bc3e745b259848d6bbc9"
+          }
+        },
+        {
+          "client_id": "536066125827-qu8eg2se506s2428n9k1brc6vskl5b3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs_LTsadZG_1qDDToaqf-fUncIrUsL-aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536066125827-2uehmk1a9kugv3hdf7g0qnus3oh6su3h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536066125827:android:3dc00d05fbe7d6fd1f9e36",
+        "android_client_info": {
+          "package_name": "com.tollview.tollview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536066125827-fil69lifsqgdul1augbd37peljo8uabl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tollview.tollview",
+            "certificate_hash": "2240931135ef7eb8b707bc3e745b259848d6bbc9"
+          }
+        },
+        {
+          "client_id": "536066125827-qu8eg2se506s2428n9k1brc6vskl5b3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs_LTsadZG_1qDDToaqf-fUncIrUsL-aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536066125827-2uehmk1a9kugv3hdf7g0qnus3oh6su3h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

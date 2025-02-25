@@ -12,7 +12,7 @@ import com.tollview.tollview.ui.history.HistoryScreen
 import com.tollview.tollview.ui.profile.ProfileScreen
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(navController: NavHostController, onLogout: () -> Unit) {
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
@@ -23,7 +23,7 @@ fun AppNavHost(navController: NavHostController) {
         ) {
             composable("home") { HomeScreen() }
             composable("history") { HistoryScreen() }
-            composable("profile") { ProfileScreen() }
+            composable("profile") { ProfileScreen(onLogout) }
         }
     }
 }
